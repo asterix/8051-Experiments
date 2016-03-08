@@ -1,0 +1,866 @@
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 1
+
+
+
+
+
+       MCS-51 Family Macro Assembler   A S E M - 5 1   V 1.3
+       =====================================================
+
+
+
+	Source File:	ANE.ASM
+	Object File:	ANE.hex
+	List File:	ANE.lst
+
+
+
+ Line  I  Addr  Code            Source
+
+    1:				;COUNT AND DISPLAY + ANALOG METER + SERIAL COMM. (9600 bps)
+    2:				;ANEMOMETER COUNT PROCESSOR
+    3:				;29/02/2008	:::::::::::::::::::::::::::::::::: UPDATED - 14/03/2008
+    4:				;ASTER
+    5:
+    6:
+    7:				$NOMOD51
+    8:				$INCLUDE (89C52.MCU)
+    9: 1			;   AT89C52 processor definition file
+   10: 1			;   =================================
+   11: 1
+   12: 1	N	 80	P0	DATA	080H
+   13: 1	N	 81	SP	DATA	081H
+   14: 1	N	 82	DPL	DATA	082H
+   15: 1	N	 83	DPH	DATA	083H
+   16: 1	N	 87	PCON	DATA	087H
+   17: 1	N	 88	TCON	DATA	088H
+   18: 1	N	 89	TMOD	DATA	089H
+   19: 1	N	 8A	TL0	DATA	08AH
+   20: 1	N	 8B	TL1	DATA	08BH
+   21: 1	N	 8C	TH0	DATA	08CH
+   22: 1	N	 8D	TH1	DATA	08DH
+   23: 1	N	 90	P1	DATA	090H
+   24: 1	N	 98	SCON	DATA	098H
+   25: 1	N	 99	SBUF	DATA	099H
+   26: 1	N	 A0	P2	DATA	0A0H
+   27: 1	N	 A8	IE	DATA	0A8H
+   28: 1	N	 B0	P3	DATA	0B0H
+   29: 1	N	 B8	IP	DATA	0B8H
+   30: 1	N	 C8	T2CON	DATA	0C8H
+   31: 1	N	 C9	T2MOD	DATA	0C9H
+   32: 1	N	 CA	RCAP2L	DATA	0CAH
+   33: 1	N	 CB	RCAP2H	DATA	0CBH
+   34: 1	N	 CC	TL2	DATA	0CCH
+   35: 1	N	 CD	TH2	DATA	0CDH
+   36: 1	N	 D0	PSW	DATA	0D0H
+   37: 1	N	 E0	ACC	DATA	0E0H
+   38: 1	N	 F0	B	DATA	0F0H
+   39: 1
+   40: 1	N	 88	IT0	BIT	088H
+   41: 1	N	 89	IE0	BIT	089H
+   42: 1	N	 8A	IT1	BIT	08AH
+   43: 1	N	 8B	IE1	BIT	08BH
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
+
+
+
+ Line  I  Addr  Code            Source
+
+   44: 1	N	 8C	TR0	BIT	08CH
+   45: 1	N	 8D	TF0	BIT	08DH
+   46: 1	N	 8E	TR1	BIT	08EH
+   47: 1	N	 8F	TF1	BIT	08FH
+   48: 1	N	 90	T2	BIT	090H
+   49: 1	N	 91	T2EX	BIT	091H
+   50: 1	N	 98	RI	BIT	098H
+   51: 1	N	 99	TI	BIT	099H
+   52: 1	N	 9A	RB8	BIT	09AH
+   53: 1	N	 9B	TB8	BIT	09BH
+   54: 1	N	 9C	REN	BIT	09CH
+   55: 1	N	 9D	SM2	BIT	09DH
+   56: 1	N	 9E	SM1	BIT	09EH
+   57: 1	N	 9F	SM0	BIT	09FH
+   58: 1	N	 A8	EX0	BIT	0A8H
+   59: 1	N	 A9	ET0	BIT	0A9H
+   60: 1	N	 AA	EX1	BIT	0AAH
+   61: 1	N	 AB	ET1	BIT	0ABH
+   62: 1	N	 AC	ES	BIT	0ACH
+   63: 1	N	 AD	ET2	BIT	0ADH
+   64: 1	N	 AF	EA	BIT	0AFH
+   65: 1	N	 B0	RXD	BIT	0B0H
+   66: 1	N	 B1	TXD	BIT	0B1H
+   67: 1	N	 B2	INT0	BIT	0B2H
+   68: 1	N	 B3	INT1	BIT	0B3H
+   69: 1	N	 B4	T0	BIT	0B4H
+   70: 1	N	 B5	T1	BIT	0B5H
+   71: 1	N	 B6	WR	BIT	0B6H
+   72: 1	N	 B7	RD	BIT	0B7H
+   73: 1	N	 B8	PX0	BIT	0B8H
+   74: 1	N	 B9	PT0	BIT	0B9H
+   75: 1	N	 BA	PX1	BIT	0BAH
+   76: 1	N	 BB	PT1	BIT	0BBH
+   77: 1	N	 BC	PS	BIT	0BCH
+   78: 1	N	 BD	PT2	BIT	0BDH
+   79: 1	N	 C8	CPRL2	BIT	0C8H
+   80: 1	N	 C9	CT2	BIT	0C9H
+   81: 1	N	 CA	TR2	BIT	0CAH
+   82: 1	N	 CB	EXEN2	BIT	0CBH
+   83: 1	N	 CC	TCLK	BIT	0CCH
+   84: 1	N	 CD	RCLK	BIT	0CDH
+   85: 1	N	 CE	EXF2	BIT	0CEH
+   86: 1	N	 CF	TF2	BIT	0CFH
+   87: 1	N	 D0	P	BIT	0D0H
+   88: 1	N	 D2	OV	BIT	0D2H
+   89: 1	N	 D3	RS0	BIT	0D3H
+   90: 1	N	 D4	RS1	BIT	0D4H
+   91: 1	N	 D5	F0	BIT	0D5H
+   92: 1	N	 D6	AC	BIT	0D6H
+   93: 1	N	 D7	CY	BIT	0D7H
+   94: 1
+   95: 1	N      0000	RESET	CODE	000H
+   96: 1	N      0003	EXTI0	CODE	003H
+   97: 1	N      000B	TIMER0	CODE	00BH
+   98: 1	N      0013	EXTI1	CODE	013H
+   99: 1	N      001B	TIMER1	CODE	01BH
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+
+
+
+ Line  I  Addr  Code            Source
+
+  100: 1	N      0023	SINT	CODE	023H
+  101: 1	N      002B	TIMER2	CODE	02BH
+  102:
+  103:
+  104:		N      0000	ORG 0000H
+  105:	  0000	80 2E		SJMP 0030H
+  106:
+  107:		N      0023	ORG 0023H
+  108:	  0023	02 09 00	LJMP 0900H			;SERIAL ISR AT 0900H
+  109:
+  110:		N      0030	ORG 0030H
+  111:
+  112:
+  113:	  0030	75 89 15	START: 		MOV TMOD,#15H	;TIMER0 AS EXTERNAL COUNTER AND TIMER1 AS 50ms X 20 TIME KEEPER
+  114:
+  115:						;MOV IE,#88H
+  116:						;MOV IP,#08H
+  117:
+  118:	  0033	75 8D 3C			MOV TH1,#3CH
+  119:	  0036	75 8B B0			MOV TL1,#0B0H
+  120:	  0039	D2 8E				SETB TR1	;START TIMERS
+  121:	  003B	D2 8C				SETB TR0
+  122:
+  123:	  003D	E4				CLR A		;INITIALIZATION
+  124:	  003E	F5 90				MOV P1,A
+  125:	  0040	F5 A0				MOV P2,A
+  126:	  0042	78 00				MOV R0,#00H
+  127:	  0044	7A 00				MOV R2,#00H
+  128:	  0046	7C 00				MOV R4,#00H
+  129:	  0048	75 32 30			MOV 32H,#30H	;ASCII ZEROS
+  130:	  004B	75 31 30			MOV 31H,#30H
+  131:	  004E	75 30 30			MOV 30H,#30H
+  132:	  0051	D2 B4				SETB P3.4	;CONFIGURE AS INPUT PIN
+  133:
+  134:
+  135:	  0053	75 3B 07			MOV 3BH,#07H	;DATA FOR ANALOG METER
+  136:	  0056	75 3C 02			MOV 3CH,#02H
+  137:	  0059	75 3D 01			MOV 3DH,#01H
+  138:	  005C	75 3E 01			MOV 3EH,#01H
+  139:	  005F	75 3F 01			MOV 3FH,#01H
+  140:
+  141:
+  142:	  0062	75 CB FF			MOV RCAP2H,#0FFH	;CONFIGURE TIMER2 AS BAUD GENERATOR AT 9600 bps
+  143:	  0065	75 CA D9			MOV RCAP2L,#0D9H
+  144:	  0068	75 C8 30			MOV T2CON,#30H		;FULL DUPLEX
+  145:
+  146:	  006B	53 87 7F			ANL PCON,#7FH
+  147:	  006E	75 98 40			MOV SCON,#40H
+  148:	  0071	75 A8 98			MOV IE,#98H		;ENABLE INTERRUPTS: TIMER1 OVERFLOW AND SERIAL
+  149:	  0074	75 B8 08			MOV IP,#08H		;SET HIGH PRIORITY FOR TIMER1 INTERRUPT
+  150:	  0077	D2 CA				SETB TR2		;START TIMER2
+  151:
+  152:	  0079	12 02 38			LCALL SER_INIT
+  153:
+  154:	  007C	74 30				MOV A,#30H		;START SERIAL COMMUNICATION
+  155:	  007E	12 02 35			LCALL XMIT
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+
+
+
+ Line  I  Addr  Code            Source
+
+  156:
+  157:				;INITIALISATION ENDS HERE
+  158:				;---------------------------------------------------------------------------------------------------
+				--------------------
+  159:
+  160:	  0081	8A 33		MAIN_T:		MOV 33H,R2
+  161:	  0083	A8 33				MOV R0,33H
+  162:
+  163:	  0085	74 38		LCD_BGN:	MOV A,#38H
+  164:	  0087	12 02 06			LCALL COMMAND
+  165:	  008A	74 0C				MOV A,#0CH
+  166:	  008C	12 02 06			LCALL COMMAND
+  167:	  008F	74 06				MOV A,#06H
+  168:	  0091	12 02 06			LCALL COMMAND
+  169:	  0094	74 01				MOV A,#01H
+  170:	  0096	12 02 06			LCALL COMMAND
+  171:
+  172:
+  173:
+  174:	  0099	E8		BCD_ASC:	MOV A,R0
+  175:	  009A	75 F0 64			MOV B,#64H
+  176:	  009D	84				DIV AB
+  177:	  009E	24 30				ADD A,#30H
+  178:	  00A0	F5 32				MOV 32H,A
+  179:	  00A2	E5 F0				MOV A,B
+  180:	  00A4	75 F0 0A			MOV B,#0AH
+  181:	  00A7	84				DIV AB
+  182:	  00A8	24 30				ADD A,#30H
+  183:	  00AA	F5 31				MOV 31H,A
+  184:	  00AC	E5 F0				MOV A,B
+  185:	  00AE	24 30				ADD A,#30H
+  186:	  00B0	F5 30				MOV 30H,A	; COUNT PLACED IN 32H:31H:30H AS ASCII VALUES OF THE THREE DIGITS
+  187:
+  188:				;---------------------------------------------------------------------------------------------------
+				------
+  189:				;ANALOG LEVEL METER
+  190:				;LEVEL STORER
+  191:				;RAM 3AH:39H:38H:37H::8'S:4'S:2'S:1'S
+  192:				;INTEGRATED-14/03/2008
+  193:
+  194:	  00B2	E5 33		LEVL8:		MOV A,33H
+  195:	  00B4	75 F0 08			MOV B,#08H
+  196:	  00B7	84				DIV AB
+  197:	  00B8	F5 3A				MOV 3AH,A
+  198:	  00BA	E5 F0				MOV A,B
+  199:	  00BC	75 F0 04			MOV B,#04H
+  200:	  00BF	84				DIV AB
+  201:	  00C0	F5 39				MOV 39H,A
+  202:	  00C2	E5 F0				MOV A,B
+  203:	  00C4	75 F0 02			MOV B,#02H
+  204:	  00C7	84				DIV AB
+  205:	  00C8	F5 38				MOV 38H,A
+  206:	  00CA	85 F0 37			MOV 37H,B
+  207:
+  208:	  00CD	00		FINISHED:	NOP
+  209:
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
+
+
+
+ Line  I  Addr  Code            Source
+
+  210:				;---------------------------------------------------------------------------------------------------
+				------
+  211:				; LCD DISPLAY ROUTINES
+  212:
+  213:	  00CE	90 0F 00	LCD_RTN0:	MOV DPTR,#MSG1
+  214:	  00D1	E4		RPT0:		CLR A
+  215:	  00D2	93				MOVC A,@A+DPTR
+  216:	  00D3	B4 FF 02			CJNE A,#0FFH,NEXT0
+  217:	  00D6	80 06				SJMP OVER0
+  218:	  00D8	12 02 15	NEXT0:		LCALL DISPLAY
+  219:	  00DB	A3				INC DPTR
+  220:	  00DC	80 F3				SJMP RPT0
+  221:	  00DE	00		OVER0:		NOP
+  222:
+  223:
+  224:	  00DF	E5 32		LCD_RTN1:	MOV A,32H
+  225:	  00E1	12 02 15			LCALL DISPLAY
+  226:	  00E4	E5 31				MOV A,31H
+  227:	  00E6	12 02 15			LCALL DISPLAY
+  228:	  00E9	E5 30				MOV A,30H
+  229:	  00EB	12 02 15			LCALL DISPLAY
+  230:	  00EE	00		OVER1:		NOP
+  231:
+  232:
+  233:	  00EF	90 0F 0F	LCD_RTN2:	MOV DPTR,#MSG2
+  234:	  00F2	E4		RPT2:		CLR A
+  235:	  00F3	93				MOVC A,@A+DPTR
+  236:	  00F4	B4 FF 02			CJNE A,#0FFH,NEXT2
+  237:	  00F7	80 06				SJMP OVER2
+  238:	  00F9	12 02 15	NEXT2:		LCALL DISPLAY
+  239:	  00FC	A3				INC DPTR
+  240:	  00FD	80 F3				SJMP RPT2
+  241:	  00FF	00		OVER2:		NOP
+  242:
+  243:				;---------------------------------------------------------------------------------------------------
+				---------
+  244:				;ANALOG LEVEL METER
+  245:				;INTEGRATED-14/03/2008
+  246:
+  247:	  0100	74 40		AL_MTR:	MOV A,#40H
+  248:	  0102	FF			MOV R7,A
+  249:	  0103	12 02 06		LCALL COMMAND
+  250:
+  251:	  0106	12 01 42		LCALL CG_CLR
+  252:
+  253:	  0109	74 40			MOV A,#40H
+  254:	  010B	FF			MOV R7,A
+  255:	  010C	12 02 06		LCALL COMMAND
+  256:
+  257:	  010F	12 01 4C		LCALL CG_LOAD
+  258:
+  259:	  0112	74 C0			MOV A,#0C0H		;SET DDRAM ADDRESS TO 40H = LINE 2 OF LCD
+  260:	  0114	12 02 06		LCALL COMMAND
+  261:
+  262:	  0117	74 00			MOV A,#00H
+  263:	  0119	12 02 15	BACK:	LCALL DISPLAY
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 6
+
+
+
+ Line  I  Addr  Code            Source
+
+  264:	  011C	04			INC A
+  265:	  011D	B4 08 F9		CJNE A,#08H,BACK
+  266:
+  267:	  0120	74 02			MOV A,#02H
+  268:	  0122	12 02 06		LCALL COMMAND
+  269:
+  270:				;---------------------------------------------------------------------------------------------------
+				---------
+  271:				;LOAD TRANSMISSION DATA INTO RAM
+  272:
+  273:	  0125	D2 E3		SER_DATA:	SETB ACC.3
+  274:	  0127	E8				MOV A,R0
+  275:	  0128	F9				MOV R1,A
+  276:	  0129	A7 32				MOV @R1,32H
+  277:	  012B	09				INC R1
+  278:	  012C	A7 31				MOV @R1,31H
+  279:	  012E	09				INC R1
+  280:	  012F	A7 30				MOV @R1,30H
+  281:	  0131	C2 E3				CLR ACC.3
+  282:				;---------------------------------------------------------------------------------------------------
+				---------
+  283:						;INC R2         TEST INSTRUCTION
+  284:	  0133	7F 04		DELAY_VISUAL:	MOV R7,#04H	; 0.5 SECONDS APPROX.
+  285:	  0135	7E FF				MOV R6,#0FFH
+  286:	  0137	7D FF				MOV R5,#0FFH
+  287:	  0139	DD FE				DJNZ R5,$
+  288:	  013B	DE FC				DJNZ R6,$-2
+  289:	  013D	DF FB				DJNZ R7,$-3
+  290:
+  291:	  013F	02 00 81	STAY_END:	LJMP MAIN_T
+  292:
+  293:				;---------------------------------------------------------------------------------------------------
+				---------
+  294:				;CLEAR CGRAM DATA
+  295:
+  296:	  0142	7E 40		CG_CLR:	MOV R6,#40H
+  297:	  0144	74 00		RPTC:	MOV A,#00H
+  298:	  0146	12 02 15		LCALL DISPLAY
+  299:	  0149	DE F9			DJNZ R6,RPTC
+  300:	  014B	22			RET
+  301:				;---------------------------------------------------------------------------------------------------
+				---------
+  302:				;LOAD THE CHARACTER PATTERNS IN CGRAM
+  303:
+  304:	  014C	7B 00		CG_LOAD:MOV R3,#00H
+  305:
+  306:	  014E	AD 3A		DIS_8:	MOV R5,3AH
+  307:	  0150	BD 00 02		CJNE R5,#00H,NXT80
+  308:	  0153	80 16			SJMP OVR0
+  309:	  0155	AE 3C		NXT80:	MOV R6,3CH
+  310:	  0157	A9 3B		NXT801:	MOV R1,3BH
+  311:	  0159	74 1F		NXT8:	MOV A,#1FH
+  312:	  015B	0B			INC R3
+  313:	  015C	12 02 15		LCALL DISPLAY
+  314:	  015F	D9 F8			DJNZ R1,NXT8
+  315:	  0161	74 00			MOV A,#00H
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 7
+
+
+
+ Line  I  Addr  Code            Source
+
+  316:	  0163	0B			INC R3
+  317:	  0164	12 02 15		LCALL DISPLAY
+  318:
+  319:	  0167	DE EE			DJNZ R6,NXT801
+  320:	  0169	DD EA			DJNZ R5,NXT80
+  321:	  016B	00		OVR0:	NOP
+  322:
+  323:	  016C	BB 40 03		CJNE R3,#40H,FRR0
+  324:	  016F	02 02 04	FRRG0:	LJMP OVER
+  325:	  0172	50 FB		FRR0:	JNC FRRG0
+  326:
+  327:
+  328:	  0174	AD 39		DIS_4:	MOV R5,39H
+  329:	  0176	BD 00 02		CJNE R5,#00H,NXT40
+  330:	  0179	80 14			SJMP OVR1
+  331:	  017B	AE 3D		NXT40:	MOV R6,3DH
+  332:	  017D	A9 3B		NXT401:	MOV R1,3BH
+  333:	  017F	74 1F		NXT4:	MOV A,#1FH
+  334:	  0181	0B			INC R3
+  335:	  0182	12 02 15		LCALL DISPLAY
+  336:	  0185	D9 F8			DJNZ R1,NXT4
+  337:	  0187	74 00			MOV A,#00H
+  338:	  0189	0B			INC R3
+  339:	  018A	12 02 15		LCALL DISPLAY
+  340:	  018D	DE EE			DJNZ R6,NXT401
+  341:	  018F	00		OVR1:	NOP
+  342:
+  343:	  0190	BB 40 03		CJNE R3,#40H,FRR1
+  344:	  0193	02 02 04	FRRG1:	LJMP OVER
+  345:	  0196	50 FB		FRR1:	JNC FRRG1
+  346:
+  347:	  0198	AD 38		DIS_21:	MOV R5,38H
+  348:	  019A	BD 00 02		CJNE R5,#00H,NXT20
+  349:	  019D	80 3F			SJMP DIS_1
+  350:
+  351:	  019F	AD 37		NXT20:	MOV R5,37H
+  352:	  01A1	A9 3B			MOV R1,3BH
+  353:	  01A3	BD 00 10		CJNE R5,#00H,NXT210
+  354:	  01A6	74 1E		NXT2:	MOV A,#1EH
+  355:	  01A8	0B			INC R3
+  356:	  01A9	12 02 15		LCALL DISPLAY
+  357:	  01AC	D9 F8			DJNZ R1,NXT2
+  358:	  01AE	74 00			MOV A,#00H
+  359:	  01B0	0B			INC R3
+  360:	  01B1	12 02 15		LCALL DISPLAY
+  361:	  01B4	80 3F			SJMP CLRR
+  362:
+  363:	  01B6	74 1F		NXT210:	MOV A,#1FH
+  364:	  01B8	0B			INC R3
+  365:	  01B9	12 02 15		LCALL DISPLAY
+  366:	  01BC	D9 F8			DJNZ R1,NXT210
+  367:	  01BE	74 00			MOV A,#00H
+  368:	  01C0	0B			INC R3
+  369:	  01C1	12 02 15		LCALL DISPLAY
+  370:
+  371:	  01C4	BB 40 03		CJNE R3,#40H,FRR2
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 8
+
+
+
+ Line  I  Addr  Code            Source
+
+  372:	  01C7	02 02 04	FRRG2:	LJMP OVER
+  373:	  01CA	50 FB		FRR2:	JNC FRRG2
+  374:
+  375:	  01CC	A9 3B			MOV R1,3BH
+  376:	  01CE	74 10		NXT2101:MOV A,#10H
+  377:	  01D0	0B			INC R3
+  378:	  01D1	12 02 15		LCALL DISPLAY
+  379:	  01D4	D9 F8			DJNZ R1,NXT2101
+  380:	  01D6	74 00			MOV A,#00H
+  381:	  01D8	0B			INC R3
+  382:	  01D9	12 02 15		LCALL DISPLAY
+  383:	  01DC	80 17			SJMP CLRR
+  384:
+  385:
+  386:	  01DE	A9 3B		DIS_1:	MOV R1,3BH
+  387:	  01E0	AD 37			MOV R5,37H
+  388:	  01E2	BD 00 02		CJNE R5,#00H,REP1
+  389:	  01E5	80 0E			SJMP CLRR
+  390:	  01E7	74 18		REP1:	MOV A,#18H
+  391:	  01E9	0B			INC R3
+  392:	  01EA	12 02 15		LCALL DISPLAY
+  393:	  01ED	D9 F8			DJNZ R1,REP1
+  394:	  01EF	74 00			MOV A,#00H
+  395:	  01F1	0B			INC R3
+  396:	  01F2	12 02 15		LCALL DISPLAY
+  397:
+  398:	  01F5	74 00		CLRR:	MOV A,#00H
+  399:	  01F7	BB 40 02		CJNE R3,#40H,REPR
+  400:	  01FA	80 08			SJMP OVER
+  401:	  01FC	50 06		REPR:	JNC OVER
+  402:	  01FE	0B			INC R3
+  403:	  01FF	12 02 15		LCALL DISPLAY
+  404:	  0202	80 F1			SJMP CLRR
+  405:
+  406:	  0204	00		OVER:	NOP
+  407:	  0205	22			RET
+  408:
+  409:				;---------------------------------------------------------------------------------------------------
+				---------
+  410:				;LCD FUNCTIONS
+  411:
+  412:	  0206	12 02 24	COMMAND:	LCALL READY
+  413:	  0209	C2 92				CLR P1.2
+  414:	  020B	C2 91				CLR P1.1
+  415:	  020D	F5 A0				MOV P2,A
+  416:	  020F	D2 93				SETB P1.3
+  417:	  0211	00				NOP
+  418:	  0212	C2 93				CLR P1.3
+  419:	  0214	22				RET
+  420:
+  421:	  0215	12 02 24	DISPLAY:	LCALL READY
+  422:	  0218	C2 92				CLR P1.2
+  423:	  021A	D2 91				SETB P1.1
+  424:	  021C	F5 A0				MOV P2,A
+  425:	  021E	D2 93				SETB P1.3
+  426:	  0220	00				NOP
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 9
+
+
+
+ Line  I  Addr  Code            Source
+
+  427:	  0221	C2 93				CLR P1.3
+  428:	  0223	22				RET
+  429:
+  430:
+  431:	  0224	D2 A7		READY:		SETB P2.7
+  432:	  0226	C2 91				CLR P1.1
+  433:	  0228	D2 92				SETB P1.2
+  434:	  022A	C2 93		BUSY:		CLR P1.3
+  435:	  022C	D2 93				SETB P1.3
+  436:	  022E	20 A7 F9			JB P2.7,BUSY
+  437:	  0231	00				NOP
+  438:	  0232	C2 93				CLR P1.3
+  439:	  0234	22				RET
+  440:				;---------------------------------------------------------------------------------------------------
+				--------
+  441:				;SERIAL TRANSMISSION
+  442:
+  443:	  0235	F5 99		XMIT:		MOV SBUF,A
+  444:	  0237	22				RET
+  445:
+  446:				;---------------------------------------------------------------------------------------------------
+				--------
+  447:				;SERIAL INITIALIZE
+  448:
+  449:	  0238	D2 E3		SER_INIT:	SETB ACC.3
+  450:	  023A	7A 50				MOV R2,#50H
+  451:	  023C	90 0F 20			MOV DPTR,#MSGSER	;SERIAL RAM INITIALISED FROM RAM 50H
+  452:	  023F	E4		RPTSER:		CLR A			;ADDRESS COPY IN R1 OF BANK 1
+  453:	  0240	79 50				MOV R1,#50H
+  454:	  0242	93				MOVC A,@A+DPTR
+  455:	  0243	B4 FF 02			CJNE A,#0FFH,AHD
+  456:	  0246	80 05				SJMP AHD0
+  457:	  0248	F7		AHD:		MOV @R1,A
+  458:	  0249	09				INC R1
+  459:	  024A	A3				INC DPTR
+  460:	  024B	80 F2				SJMP RPTSER
+  461:	  024D	00		AHD0:		NOP
+  462:	  024E	E9				MOV A,R1
+  463:	  024F	F8				MOV R0,A
+  464:	  0250	C2 E3				CLR ACC.3
+  465:	  0252	22				RET
+  466:				;---------------------------------------------------------------------------------------------------
+				--------
+  467:				;INTERRUPT SERVICE ROUTINE: TIMER1
+  468:
+  469:
+  470:		N      001B	ORG 001BH
+  471:	  001B	02 08 00			LJMP 0800H
+  472:		N      0800	ORG 0800H
+  473:	  0800	C2 8E				CLR TR1
+  474:	  0802	75 8D 3C			MOV TH1,#3CH
+  475:	  0805	75 8B BA			MOV TL1,#0BAH
+  476:	  0808	0C				INC R4
+  477:	  0809	D2 8E				SETB TR1
+  478:	  080B	BC 14 18			CJNE R4,#14H,SKIP
+  479:	  080E	7C 00				MOV R4,#00H
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 10
+
+
+
+ Line  I  Addr  Code            Source
+
+  480:	  0810	C2 8C				CLR TR0
+  481:	  0812	C2 8E				CLR TR1
+  482:	  0814	AA 8A				MOV R2,TL0	;ABSORB LOWER BYTE
+  483:
+  484:
+  485:						;INC R2		;TEST INSTRUCTION
+  486:	  0816	75 8C 00			MOV TH0,#00H
+  487:	  0819	75 8A 00			MOV TL0,#00H
+  488:	  081C	75 8D 3C			MOV TH1,#3CH
+  489:	  081F	75 8B BA			MOV TL1,#0BAH
+  490:	  0822	D2 8C				SETB TR0
+  491:	  0824	D2 8E				SETB TR1
+  492:	  0826	32		SKIP:		RETI
+  493:
+  494:
+  495:				;---------------------------------------------------------------------------------------------------
+				--------
+  496:				;INTERRUPT SERVICE ROUTINE: SERIAL
+  497:
+  498:		N      0900	ORG 0900H
+  499:
+  500:	  0900	C0 E0		SER_TR:		PUSH ACC
+  501:	  0902	C0 83				PUSH DPH
+  502:	  0904	C0 82				PUSH DPL
+  503:	  0906	D2 E3				SETB ACC.3			;SWITCH TO BANK 1
+  504:	  0908	E9				MOV A,R1
+  505:	  0909	FD				MOV R5,A
+  506:
+  507:	  090A	BA 62 03			CJNE R2,#62H,CONTINUE
+  508:	  090D	12 02 38			LCALL SER_INIT
+  509:	  0910	EA		CONTINUE:	MOV A,R2
+  510:	  0911	F9				MOV R1,A
+  511:	  0912	E7				MOV A,@R1
+  512:	  0913	0A				INC R2
+  513:
+  514:
+  515:	  0914	ED				MOV A,R5
+  516:	  0915	F9				MOV R1,A
+  517:	  0916	D0 82				POP DPL
+  518:	  0918	D0 83				POP DPH
+  519:	  091A	D0 E0				POP ACC
+  520:
+  521:
+  522:	  091C	C2 E3				CLR ACC.3		;SWITCH TO BANK 0
+  523:
+  524:	  091E	32				RETI
+  525:
+  526:
+  527:				;---------------------------------------------------------------------------------------------------
+				--------
+  528:		N      0F00	ORG 0F00H
+  529:
+  530:	  0F00	53 50 45 45	MSG1: DB 'SPEED = '
+	  0F04	44 20 3D 20
+  531:
+  532:		N      0F0F	ORG  0F0FH
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 11
+
+
+
+ Line  I  Addr  Code            Source
+
+  533:
+  534:	  0F0F	20 52 50 53	MSG2: DB ' RPS'
+  535:
+  536:		N      0F20	ORG 0F20H
+  537:
+  538:	  0F20	53 50 45 45	MSGSER: DB 'SPEED (RPS) =  '
+	  0F24	44 20 28 52
+	  0F28	50 53 29 20
+	  0F2C	3D 20 20
+  539:
+  540:				END
+  541:
+  542:
+  543:
+  544:
+  545:
+  546:
+  547:
+  548:
+  549:
+  550:
+  551:
+  552:
+  553:
+  554:
+  555:
+  556:
+  557:
+  558:
+  559:
+  560:
+  561:
+  562:
+  563:
+  564:
+  565:
+
+
+
+
+
+                     register banks used:  ---
+
+                     no errors
+
+
+
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 12
+
+
+
+
+
+	       L I S T   O F   S Y M B O L S
+	       =============================
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+??ASEM_51			  NUMBER    8051
+??VERSION			  NUMBER    0130
+AC				  BIT	      D6	  92
+ACC				  DATA	      E0	  37
+AHD				  CODE	    0248	 457
+AHD0				  CODE	    024D	 461
+AL_MTR				  CODE	    0100	 247
+B				  DATA	      F0	  38
+BACK				  CODE	    0119	 263
+BCD_ASC				  CODE	    0099	 174
+BUSY				  CODE	    022A	 434
+CG_CLR				  CODE	    0142	 296
+CG_LOAD				  CODE	    014C	 304
+CLRR				  CODE	    01F5	 398
+COMMAND				  CODE	    0206	 412
+CONTINUE			  CODE	    0910	 509
+CPRL2				  BIT	      C8	  79
+CT2				  BIT	      C9	  80
+CY				  BIT	      D7	  93
+DELAY_VISUAL			  CODE	    0133	 284
+DISPLAY				  CODE	    0215	 421
+DIS_1				  CODE	    01DE	 386
+DIS_21				  CODE	    0198	 347
+DIS_4				  CODE	    0174	 328
+DIS_8				  CODE	    014E	 306
+DPH				  DATA	      83	  15
+DPL				  DATA	      82	  14
+EA				  BIT	      AF	  64
+ES				  BIT	      AC	  62
+ET0				  BIT	      A9	  59
+ET1				  BIT	      AB	  61
+ET2				  BIT	      AD	  63
+EX0				  BIT	      A8	  58
+EX1				  BIT	      AA	  60
+EXEN2				  BIT	      CB	  82
+EXF2				  BIT	      CE	  85
+EXTI0				  CODE	    0003	  96
+EXTI1				  CODE	    0013	  98
+F0				  BIT	      D5	  91
+FINISHED			  CODE	    00CD	 208
+FRR0				  CODE	    0172	 325
+FRR1				  CODE	    0196	 345
+FRR2				  CODE	    01CA	 373
+FRRG0				  CODE	    016F	 324
+FRRG1				  CODE	    0193	 344
+FRRG2				  CODE	    01C7	 372
+IE				  DATA	      A8	  27
+IE0				  BIT	      89	  41
+IE1				  BIT	      8B	  43
+INT0				  BIT	      B2	  67
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 13
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+INT1				  BIT	      B3	  68
+IP				  DATA	      B8	  29
+IT0				  BIT	      88	  40
+IT1				  BIT	      8A	  42
+LCD_BGN				  CODE	    0085	 163
+LCD_RTN0			  CODE	    00CE	 213
+LCD_RTN1			  CODE	    00DF	 224
+LCD_RTN2			  CODE	    00EF	 233
+LEVL8				  CODE	    00B2	 194
+MAIN_T				  CODE	    0081	 160
+MSG1				  CODE	    0F00	 530
+MSG2				  CODE	    0F0F	 534
+MSGSER				  CODE	    0F20	 538
+NEXT0				  CODE	    00D8	 218
+NEXT2				  CODE	    00F9	 238
+NXT2				  CODE	    01A6	 354
+NXT20				  CODE	    019F	 351
+NXT210				  CODE	    01B6	 363
+NXT2101				  CODE	    01CE	 376
+NXT4				  CODE	    017F	 333
+NXT40				  CODE	    017B	 331
+NXT401				  CODE	    017D	 332
+NXT8				  CODE	    0159	 311
+NXT80				  CODE	    0155	 309
+NXT801				  CODE	    0157	 310
+OV				  BIT	      D2	  88
+OVER				  CODE	    0204	 406
+OVER0				  CODE	    00DE	 221
+OVER1				  CODE	    00EE	 230
+OVER2				  CODE	    00FF	 241
+OVR0				  CODE	    016B	 321
+OVR1				  CODE	    018F	 341
+P				  BIT	      D0	  87
+P0				  DATA	      80	  12
+P1				  DATA	      90	  23
+P2				  DATA	      A0	  26
+P3				  DATA	      B0	  28
+PCON				  DATA	      87	  16
+PS				  BIT	      BC	  77
+PSW				  DATA	      D0	  36
+PT0				  BIT	      B9	  74
+PT1				  BIT	      BB	  76
+PT2				  BIT	      BD	  78
+PX0				  BIT	      B8	  73
+PX1				  BIT	      BA	  75
+RB8				  BIT	      9A	  52
+RCAP2H				  DATA	      CB	  33
+RCAP2L				  DATA	      CA	  32
+RCLK				  BIT	      CD	  84
+RD				  BIT	      B7	  72
+READY				  CODE	    0224	 431
+REN				  BIT	      9C	  54
+REP1				  CODE	    01E7	 390
+REPR				  CODE	    01FC	 401
+RESET				  CODE	    0000	  95
+RI				  BIT	      98	  50
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 14
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+RPT0				  CODE	    00D1	 214
+RPT2				  CODE	    00F2	 234
+RPTC				  CODE	    0144	 297
+RPTSER				  CODE	    023F	 452
+RS0				  BIT	      D3	  89
+RS1				  BIT	      D4	  90
+RXD				  BIT	      B0	  65
+SBUF				  DATA	      99	  25
+SCON				  DATA	      98	  24
+SER_DATA			  CODE	    0125	 273
+SER_INIT			  CODE	    0238	 449
+SER_TR				  CODE	    0900	 500
+SINT				  CODE	    0023	 100
+SKIP				  CODE	    0826	 492
+SM0				  BIT	      9F	  57
+SM1				  BIT	      9E	  56
+SM2				  BIT	      9D	  55
+SP				  DATA	      81	  13
+START				  CODE	    0030	 113
+STAY_END			  CODE	    013F	 291
+T0				  BIT	      B4	  69
+T1				  BIT	      B5	  70
+T2				  BIT	      90	  48
+T2CON				  DATA	      C8	  30
+T2EX				  BIT	      91	  49
+T2MOD				  DATA	      C9	  31
+TB8				  BIT	      9B	  53
+TCLK				  BIT	      CC	  83
+TCON				  DATA	      88	  17
+TF0				  BIT	      8D	  45
+TF1				  BIT	      8F	  47
+TF2				  BIT	      CF	  86
+TH0				  DATA	      8C	  21
+TH1				  DATA	      8D	  22
+TH2				  DATA	      CD	  35
+TI				  BIT	      99	  51
+TIMER0				  CODE	    000B	  97
+TIMER1				  CODE	    001B	  99
+TIMER2				  CODE	    002B	 101
+TL0				  DATA	      8A	  19
+TL1				  DATA	      8B	  20
+TL2				  DATA	      CC	  34
+TMOD				  DATA	      89	  18
+TR0				  BIT	      8C	  44
+TR1				  BIT	      8E	  46
+TR2				  BIT	      CA	  81
+TXD				  BIT	      B1	  66
+WR				  BIT	      B6	  71
+XMIT				  CODE	    0235	 443

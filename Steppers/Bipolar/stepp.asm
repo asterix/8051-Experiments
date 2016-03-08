@@ -1,0 +1,102 @@
+;Least possible delay- 0C * 0FF = 0BF4 in the delay loop.
+; Interrupt usage A0001
+
+
+ORG 0000H
+SJMP 0030H
+
+
+
+ORG 0003H
+LJMP 02FFH
+
+
+
+
+ORG 0030H
+
+START:	;MOV P3,#0FFH
+INTEN:  MOV IE,#81H	; Enabling ext-int0 - 1000-0001B
+	MOV IP,#01H	; Setting high priority to ext-int0
+	MOV TCON,#01H	; Setting TCON.0 high enables falling edge interrupt triggering 
+	
+
+
+
+	;MOV R3,#05H
+	
+
+
+CLOCKW:	;MOV R4,#0CH
+	
+NEXTA:	MOV P2,#01H; coil A +
+	ACALL DELAY
+	MOV P2,#04H; coil B +
+	ACALL DELAY
+	MOV P2,#02H; coil A -
+	ACALL DELAY
+	MOV P2,#08H; coil b -
+	ACALL DELAY
+	
+	;DJNZ R4,NEXTA
+	;DJNZ R3,CLOCKW
+	SJMP NEXTA
+
+
+
+
+
+
+DELAY:  ;MOV R7,#00H
+WAITC:	MOV R6,#18H
+WAITB:	MOV R5,#0FFH
+WAITA:	DJNZ R5,WAITA
+	DJNZ R6,WAITB
+	;DJNZ R7,WAITC
+	RET
+
+
+
+NOP
+NOP
+NOP
+NOP
+HALT: 	NOP
+	SJMP HALT
+
+
+
+
+
+
+ORG 02FFH                        ; INTERRUPT SERVICE SUBROUTINE FOR INT-EXT0
+
+INTSR:	MOV R3,#03H
+
+CCLOCKW:MOV R4,#0CH
+
+NEXTB:	MOV P2,#08H; coil b -
+	ACALL DELAYB
+	MOV P2,#02H; coil A -
+	ACALL DELAYB
+	MOV P2,#04H; coil B +
+	ACALL DELAYB
+	MOV P2,#01H; coil A +
+	ACALL DELAYB
+	DJNZ R4,NEXTB
+	DJNZ R3,CCLOCKW
+	RETI
+
+
+
+
+DELAYB: ;MOV R7,#00H
+WAITCB:	MOV R6,#30H
+WAITBB:	MOV R5,#0FFH
+WAITAB:	DJNZ R5,WAITAB
+	DJNZ R6,WAITBB
+	;DJNZ R7,WAITCB
+	RET
+
+
+END

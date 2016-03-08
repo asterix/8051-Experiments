@@ -1,0 +1,135 @@
+;SENDER 1
+
+
+$NOMOD51
+$INCLUDE (AT89X52.h)
+
+
+ORG 0000H
+SJMP 0030H
+ORG 0030H
+
+
+
+START:		MOV P3,#0FFH
+			MOV P2,#00H
+			
+			MOV T2CON,#30H
+			MOV RCAP2H,#0FFH
+			MOV RCAP2L,#0DCH
+			
+			ANL PCON,#7FH
+			
+			MOV IE,#90H
+			MOV IP,#10H
+			
+			MOV SCON,#50H
+			SETB TR2
+
+			CLR A
+			MOV 23H,A 
+			MOV 24H,A
+			MOV 25H,A
+			MOV 26H,A
+
+			MOV 56H,#0CFH
+			MOV 57H,#9FH
+			MOV 58H,#0BFH
+			MOV 59H,#01H
+			LCALL COMM
+			
+			SETB P2.3
+
+			MOV 56H,#0CEH
+			MOV 57H,#9EH
+			MOV 58H,#0BEH
+			MOV 59H,#02H
+			LCALL COMM
+
+			SETB P2.4
+
+			MOV 56H,#0CDH
+			MOV 57H,#9DH
+			MOV 58H,#0BDH
+			MOV 59H,#04H
+			LCALL COMM
+
+			SETB P2.5
+
+			MOV 56H,#0CCH
+			MOV 57H,#9CH
+			MOV 58H,#0BCH
+			MOV 59H,#08H
+			LCALL COMM
+
+			SETB P2.7
+HERE:		SJMP HERE
+
+;---------------------------------------
+COMM:		MOV A,56H
+			LCALL XMIT
+
+			SETB P2.0
+
+WAIT1:		JNB 20H,WAIT1
+
+			CLR P2.0
+			SETB P2.1
+
+			MOV A,59H
+			LCALL XMIT
+WAIT2:		JNB 21H,WAIT2
+
+			CLR P2.1
+			SETB P2.2
+
+			CLR 21H
+			MOV A,58H
+			LCALL XMIT
+WAIT3:		JB 20H,WAIT3
+			RET
+;----------------------------------------
+XMIT:		CLR TR2
+			MOV SBUF,A
+			SETB TR2
+			RET
+;----------------------------------------
+CANYSE:		MOV R3,SBUF
+			MOV A,56H
+			CJNE A,#0CFH,NXT1
+			CJNE R3,#9FH,ESCX
+			SETB 20H
+NXT1:		CJNE A,#0CEH,NXT2
+			CJNE R3,#9EH,ESCX
+			SETB 20H
+NXT2:		CJNE A,#0CDH,NXT3
+			CJNE R3,#9DH,ESCX
+			SETB 20H
+NXT3:		CJNE A,#0CCH,ESCX
+			CJNE R3,#9CH,ESCX
+			SETB 20H
+ESCX:		RET
+;------------------------------------------
+ORG 0023H
+LJMP 1000H
+ORG 1000H
+
+SERCON:		CLR TR2
+			JNB RI,TXI
+			CLR RI
+			JB 20H,SKIPCC
+			LCALL CANYSE
+			SJMP EXITC
+SKIPCC:		MOV A,SBUF
+			CJNE A,58H,NXC
+			CLR 20H
+			SJMP EXITC
+NXC:		CJNE A,57H,EXITC
+			SETB 21H
+			SJMP EXITC
+TXI:		CLR TI
+EXITC:		SETB TR2
+			RETI
+;---------------------------------------------
+
+END

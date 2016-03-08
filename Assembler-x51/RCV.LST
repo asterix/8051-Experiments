@@ -1,0 +1,313 @@
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 1
+
+
+
+
+
+       MCS-51 Family Macro Assembler   A S E M - 5 1   V 1.3
+       =====================================================
+
+
+
+	Source File:	RCV.ASM
+	Object File:	RCV.hex
+	List File:	RCV.lst
+
+
+
+ Line  I  Addr  Code            Source
+
+    1:				$NOMOD51
+    2:				$INCLUDE (89C52.MCU)
+    3: 1			;   AT89C52 processor definition file
+    4: 1			;   =================================
+    5: 1
+    6: 1	N	 80	P0	DATA	080H
+    7: 1	N	 81	SP	DATA	081H
+    8: 1	N	 82	DPL	DATA	082H
+    9: 1	N	 83	DPH	DATA	083H
+   10: 1	N	 87	PCON	DATA	087H
+   11: 1	N	 88	TCON	DATA	088H
+   12: 1	N	 89	TMOD	DATA	089H
+   13: 1	N	 8A	TL0	DATA	08AH
+   14: 1	N	 8B	TL1	DATA	08BH
+   15: 1	N	 8C	TH0	DATA	08CH
+   16: 1	N	 8D	TH1	DATA	08DH
+   17: 1	N	 90	P1	DATA	090H
+   18: 1	N	 98	SCON	DATA	098H
+   19: 1	N	 99	SBUF	DATA	099H
+   20: 1	N	 A0	P2	DATA	0A0H
+   21: 1	N	 A8	IE	DATA	0A8H
+   22: 1	N	 B0	P3	DATA	0B0H
+   23: 1	N	 B8	IP	DATA	0B8H
+   24: 1	N	 C8	T2CON	DATA	0C8H
+   25: 1	N	 C9	T2MOD	DATA	0C9H
+   26: 1	N	 CA	RCAP2L	DATA	0CAH
+   27: 1	N	 CB	RCAP2H	DATA	0CBH
+   28: 1	N	 CC	TL2	DATA	0CCH
+   29: 1	N	 CD	TH2	DATA	0CDH
+   30: 1	N	 D0	PSW	DATA	0D0H
+   31: 1	N	 E0	ACC	DATA	0E0H
+   32: 1	N	 F0	B	DATA	0F0H
+   33: 1
+   34: 1	N	 88	IT0	BIT	088H
+   35: 1	N	 89	IE0	BIT	089H
+   36: 1	N	 8A	IT1	BIT	08AH
+   37: 1	N	 8B	IE1	BIT	08BH
+   38: 1	N	 8C	TR0	BIT	08CH
+   39: 1	N	 8D	TF0	BIT	08DH
+   40: 1	N	 8E	TR1	BIT	08EH
+   41: 1	N	 8F	TF1	BIT	08FH
+   42: 1	N	 90	T2	BIT	090H
+   43: 1	N	 91	T2EX	BIT	091H
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
+
+
+
+ Line  I  Addr  Code            Source
+
+   44: 1	N	 98	RI	BIT	098H
+   45: 1	N	 99	TI	BIT	099H
+   46: 1	N	 9A	RB8	BIT	09AH
+   47: 1	N	 9B	TB8	BIT	09BH
+   48: 1	N	 9C	REN	BIT	09CH
+   49: 1	N	 9D	SM2	BIT	09DH
+   50: 1	N	 9E	SM1	BIT	09EH
+   51: 1	N	 9F	SM0	BIT	09FH
+   52: 1	N	 A8	EX0	BIT	0A8H
+   53: 1	N	 A9	ET0	BIT	0A9H
+   54: 1	N	 AA	EX1	BIT	0AAH
+   55: 1	N	 AB	ET1	BIT	0ABH
+   56: 1	N	 AC	ES	BIT	0ACH
+   57: 1	N	 AD	ET2	BIT	0ADH
+   58: 1	N	 AF	EA	BIT	0AFH
+   59: 1	N	 B0	RXD	BIT	0B0H
+   60: 1	N	 B1	TXD	BIT	0B1H
+   61: 1	N	 B2	INT0	BIT	0B2H
+   62: 1	N	 B3	INT1	BIT	0B3H
+   63: 1	N	 B4	T0	BIT	0B4H
+   64: 1	N	 B5	T1	BIT	0B5H
+   65: 1	N	 B6	WR	BIT	0B6H
+   66: 1	N	 B7	RD	BIT	0B7H
+   67: 1	N	 B8	PX0	BIT	0B8H
+   68: 1	N	 B9	PT0	BIT	0B9H
+   69: 1	N	 BA	PX1	BIT	0BAH
+   70: 1	N	 BB	PT1	BIT	0BBH
+   71: 1	N	 BC	PS	BIT	0BCH
+   72: 1	N	 BD	PT2	BIT	0BDH
+   73: 1	N	 C8	CPRL2	BIT	0C8H
+   74: 1	N	 C9	CT2	BIT	0C9H
+   75: 1	N	 CA	TR2	BIT	0CAH
+   76: 1	N	 CB	EXEN2	BIT	0CBH
+   77: 1	N	 CC	TCLK	BIT	0CCH
+   78: 1	N	 CD	RCLK	BIT	0CDH
+   79: 1	N	 CE	EXF2	BIT	0CEH
+   80: 1	N	 CF	TF2	BIT	0CFH
+   81: 1	N	 D0	P	BIT	0D0H
+   82: 1	N	 D2	OV	BIT	0D2H
+   83: 1	N	 D3	RS0	BIT	0D3H
+   84: 1	N	 D4	RS1	BIT	0D4H
+   85: 1	N	 D5	F0	BIT	0D5H
+   86: 1	N	 D6	AC	BIT	0D6H
+   87: 1	N	 D7	CY	BIT	0D7H
+   88: 1
+   89: 1	N      0000	RESET	CODE	000H
+   90: 1	N      0003	EXTI0	CODE	003H
+   91: 1	N      000B	TIMER0	CODE	00BH
+   92: 1	N      0013	EXTI1	CODE	013H
+   93: 1	N      001B	TIMER1	CODE	01BH
+   94: 1	N      0023	SINT	CODE	023H
+   95: 1	N      002B	TIMER2	CODE	02BH
+   96:
+   97:
+   98:
+   99:
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+
+
+
+ Line  I  Addr  Code            Source
+
+  100:		N      0000	ORG 0000H
+  101:	  0000	80 2E		SJMP 0030H
+  102:
+  103:
+  104:		N      0030	ORG 0030H
+  105:
+  106:
+  107:
+  108:	  0030	E4		START:		CLR A
+  109:	  0031	F5 90				MOV P1,A
+  110:	  0033	F5 A0				MOV P2,A
+  111:	  0035	F5 B0				MOV P3,A
+  112:	  0037	D2 B0				SETB P3.0
+  113:	  0039	F9				MOV R1,A
+  114:
+  115:
+  116:	  003A	75 98 50	STARTS:		MOV SCON,#50H
+  117:	  003D	53 87 7F			ANL PCON,#7FH
+  118:
+  119:	  0040	75 A8 90			MOV IE,#90H
+  120:	  0043	75 B8 10			MOV IP,#10H
+  121:
+  122:	  0046	75 C8 30			MOV T2CON,#30H
+  123:	  0049	75 CB FF			MOV RCAP2H,#0FFH	;9600 bps
+  124:	  004C	75 CA DC			MOV RCAP2L,#0DCH
+  125:
+  126:	  004F	D2 CA				SETB TR2
+  127:
+  128:
+  129:
+  130:	  0051	F5 A0		HERE:		MOV P2,A
+  131:	  0053	80 FC				SJMP HERE
+  132:
+  133:
+  134:
+  135:		N      0023	ORG 0023H
+  136:	  0023	02 10 00	LJMP 1000H
+  137:		N      1000	ORG 1000H
+  138:
+  139:	  1000	00		RXDC:		NOP
+  140:	  1001	30 98 05			JNB RI,EXIT
+  141:	  1004	C2 98				CLR RI
+  142:	  1006	E5 99				MOV A,SBUF
+  143:	  1008	FD				MOV R5,A
+  144:
+  145:	  1009	32		EXIT:		RETI
+  146:
+  147:
+  148:				END
+
+
+
+
+
+                     register banks used:  ---
+
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+
+
+
+                     no errors
+
+
+
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
+
+
+
+
+
+	       L I S T   O F   S Y M B O L S
+	       =============================
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+??ASEM_51			  NUMBER    8051
+??VERSION			  NUMBER    0130
+AC				  BIT	      D6	  86
+ACC				  DATA	      E0	  31
+B				  DATA	      F0	  32
+CPRL2				  BIT	      C8	  73
+CT2				  BIT	      C9	  74
+CY				  BIT	      D7	  87
+DPH				  DATA	      83	   9
+DPL				  DATA	      82	   8
+EA				  BIT	      AF	  58
+ES				  BIT	      AC	  56
+ET0				  BIT	      A9	  53
+ET1				  BIT	      AB	  55
+ET2				  BIT	      AD	  57
+EX0				  BIT	      A8	  52
+EX1				  BIT	      AA	  54
+EXEN2				  BIT	      CB	  76
+EXF2				  BIT	      CE	  79
+EXIT				  CODE	    1009	 145
+EXTI0				  CODE	    0003	  90
+EXTI1				  CODE	    0013	  92
+F0				  BIT	      D5	  85
+HERE				  CODE	    0051	 130
+IE				  DATA	      A8	  21
+IE0				  BIT	      89	  35
+IE1				  BIT	      8B	  37
+INT0				  BIT	      B2	  61
+INT1				  BIT	      B3	  62
+IP				  DATA	      B8	  23
+IT0				  BIT	      88	  34
+IT1				  BIT	      8A	  36
+OV				  BIT	      D2	  82
+P				  BIT	      D0	  81
+P0				  DATA	      80	   6
+P1				  DATA	      90	  17
+P2				  DATA	      A0	  20
+P3				  DATA	      B0	  22
+PCON				  DATA	      87	  10
+PS				  BIT	      BC	  71
+PSW				  DATA	      D0	  30
+PT0				  BIT	      B9	  68
+PT1				  BIT	      BB	  70
+PT2				  BIT	      BD	  72
+PX0				  BIT	      B8	  67
+PX1				  BIT	      BA	  69
+RB8				  BIT	      9A	  46
+RCAP2H				  DATA	      CB	  27
+RCAP2L				  DATA	      CA	  26
+RCLK				  BIT	      CD	  78
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 6
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+RD				  BIT	      B7	  66
+REN				  BIT	      9C	  48
+RESET				  CODE	    0000	  89
+RI				  BIT	      98	  44
+RS0				  BIT	      D3	  83
+RS1				  BIT	      D4	  84
+RXD				  BIT	      B0	  59
+RXDC				  CODE	    1000	 139
+SBUF				  DATA	      99	  19
+SCON				  DATA	      98	  18
+SINT				  CODE	    0023	  94
+SM0				  BIT	      9F	  51
+SM1				  BIT	      9E	  50
+SM2				  BIT	      9D	  49
+SP				  DATA	      81	   7
+START				  CODE	    0030	 108
+STARTS				  CODE	    003A	 116
+T0				  BIT	      B4	  63
+T1				  BIT	      B5	  64
+T2				  BIT	      90	  42
+T2CON				  DATA	      C8	  24
+T2EX				  BIT	      91	  43
+T2MOD				  DATA	      C9	  25
+TB8				  BIT	      9B	  47
+TCLK				  BIT	      CC	  77
+TCON				  DATA	      88	  11
+TF0				  BIT	      8D	  39
+TF1				  BIT	      8F	  41
+TF2				  BIT	      CF	  80
+TH0				  DATA	      8C	  15
+TH1				  DATA	      8D	  16
+TH2				  DATA	      CD	  29
+TI				  BIT	      99	  45
+TIMER0				  CODE	    000B	  91
+TIMER1				  CODE	    001B	  93
+TIMER2				  CODE	    002B	  95
+TL0				  DATA	      8A	  13
+TL1				  DATA	      8B	  14
+TL2				  DATA	      CC	  28
+TMOD				  DATA	      89	  12
+TR0				  BIT	      8C	  38
+TR1				  BIT	      8E	  40
+TR2				  BIT	      CA	  75
+TXD				  BIT	      B1	  60
+WR				  BIT	      B6	  65

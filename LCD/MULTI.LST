@@ -1,0 +1,315 @@
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 1
+
+
+
+
+
+       MCS-51 Family Macro Assembler   A S E M - 5 1   V 1.3
+       =====================================================
+
+
+
+	Source File:	multi.asm
+	Object File:	multi.hex
+	List File:	multi.lst
+
+
+
+ Line  I  Addr  Code            Source
+
+    1:				;MULTI LINE AND MULTI SCREEN CONTINUOUS THROUGH DISPLAY
+    2:				;TESTED AND CHECKED ON AT89C51-     C51002/003
+    3:				;09/08/2007
+    4:				;PROGRAM RUN----------- SUCCESS.
+    5:
+    6:
+    7:
+    8:
+    9:
+   10:
+   11:		N      0000	ORG 0000H 				; P1.1-RS
+   12:	  0000	80 2E		SJMP 0030H				; P1.2-R/W
+   13:		N      0030	ORG 0030H 				; P1.3-EN
+   14:
+   15:
+   16:
+   17:
+   18:	  0030	E4		START:	CLR A
+   19:	  0031	F5 90			MOV P1,A
+   20:	  0033	F5 A0			MOV P2,A
+   21:	  0035	F5 B0			MOV P3,A
+   22:
+   23:	  0037	FB			MOV R3,A
+   24:	  0038	FC			MOV R4,A
+   25:
+   26:
+   27:	  0039	74 38		INIT:	MOV A,#38H
+   28:	  003B	12 00 88		LCALL COMMAND
+   29:	  003E	74 0C			MOV A,#0CH
+   30:	  0040	12 00 88		LCALL COMMAND
+   31:	  0043	74 06			MOV A,#06H
+   32:	  0045	12 00 88		LCALL COMMAND
+   33:	  0048	74 01			MOV A,#01H
+   34:	  004A	12 00 88		LCALL COMMAND
+   35:
+   36:
+   37:
+   38:					;MOV A,#'V'
+   39:					;LCALL DISPLAY
+   40:	  004D	7B 00		REWRT:	MOV R3,#00H
+   41:	  004F	7C 00			MOV R4,#00H
+   42:	  0051	78 00			MOV R0,#00H
+   43:	  0053	90 0F 80		MOV DPTR,#0F80H
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
+
+
+
+ Line  I  Addr  Code            Source
+
+   44:
+   45:								;CHAR BYTES FROM 0F80H
+   46:	  0056	E4		LOOP:	CLR A
+   47:
+   48:	  0057	0B			INC R3
+   49:	  0058	93			MOVC A,@A+DPTR
+   50:	  0059	A3			INC DPTR
+   51:	  005A	12 00 A8		LCALL DISPLAY
+   52:	  005D	12 00 B7		LCALL DELAY
+   53:	  0060	08			INC R0
+   54:	  0061	B8 20 05		CJNE R0,#20H,SIP1
+   55:	  0064	78 00			MOV R0,#00H
+   56:	  0066	12 00 C4		LCALL CLEAR
+   57:	  0069	E4		SIP1:	CLR A
+   58:	  006A	93			MOVC A,@A+DPTR
+   59:
+   60:	  006B	BB 10 10		CJNE R3,#10H,SKIP
+   61:	  006E	7B 00			MOV R3,#00H
+   62:	  0070	0C			INC R4
+   63:	  0071	BC 02 07		CJNE R4,#02H,NEXT
+   64:	  0074	7C 00			MOV R4,#00H
+   65:	  0076	12 00 CA		LCALL LINE1
+   66:	  0079	80 03			SJMP SKIP
+   67:	  007B	12 00 D0	NEXT:	LCALL LINE2
+   68:
+   69:
+   70:
+   71:	  007E	B4 FF D5	SKIP:	CJNE A,#0FFH,LOOP
+   72:
+   73:	  0081	12 00 C4		LCALL CLEAR
+   74:	  0084	80 C7			SJMP REWRT
+   75:
+   76:
+   77:
+   78:	  0086	80 FE		HERE:	SJMP HERE
+   79:
+   80:
+   81:
+   82:
+   83:	  0088	12 00 97	COMMAND:LCALL READY
+   84:	  008B	C2 92			CLR P1.2
+   85:	  008D	C2 91			CLR P1.1
+   86:	  008F	F5 A0			MOV P2,A
+   87:	  0091	D2 93			SETB P1.3
+   88:	  0093	00			NOP
+   89:	  0094	C2 93			CLR P1.3
+   90:	  0096	22			RET
+   91:
+   92:
+   93:	  0097	D2 A7		READY: 	SETB P2.7
+   94:	  0099	C2 91			CLR P1.1
+   95:	  009B	D2 92			SETB P1.2
+   96:	  009D	C2 93		BUSY:	CLR P1.3
+   97:	  009F	D2 93			SETB P1.3
+   98:	  00A1	20 A7 F9		JB P2.7,BUSY
+   99:	  00A4	00			NOP
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+
+
+
+ Line  I  Addr  Code            Source
+
+  100:	  00A5	C2 93			CLR P1.3
+  101:	  00A7	22			RET
+  102:
+  103:
+  104:	  00A8	12 00 97	DISPLAY:LCALL READY
+  105:	  00AB	C2 92			CLR P1.2
+  106:	  00AD	D2 91			SETB P1.1
+  107:	  00AF	F5 A0			MOV P2,A
+  108:	  00B1	D2 93			SETB P1.3
+  109:	  00B3	00			NOP
+  110:	  00B4	C2 93			CLR P1.3
+  111:	  00B6	22			RET
+  112:
+  113:	  00B7	7F 01		DELAY:  MOV R7,#01H
+  114:	  00B9	7E FF		WAITC:	MOV R6,#0FFH
+  115:	  00BB	7D FF		WAITB:	MOV R5,#0FFH
+  116:	  00BD	DD FE		WAITA:	DJNZ R5,WAITA
+  117:	  00BF	DE FA			DJNZ R6,WAITB
+  118:	  00C1	DF F6			DJNZ R7,WAITC
+  119:	  00C3	22			RET
+  120:
+  121:	  00C4	74 01		CLEAR:	MOV A,#01H
+  122:	  00C6	12 00 88		LCALL COMMAND
+  123:	  00C9	22			RET
+  124:
+  125:	  00CA	74 80		LINE1:	MOV A,#80H
+  126:	  00CC	12 00 88		LCALL COMMAND
+  127:	  00CF	22			RET
+  128:
+  129:	  00D0	74 C0		LINE2:	MOV A,#0C0H
+  130:	  00D2	12 00 88		LCALL COMMAND
+  131:	  00D5	22			RET
+  132:
+  133:
+  134:
+  135:
+  136:		N      0F80	ORG 0F80H
+  137:						;DB 'hey mel !!!'
+  138:						;DB 'Be The Change You Want To See!'
+  139:	  0F80	41 20 47 52			DB 'A GREAT MIND CAN SOAR HIGH IN IMAGINATION YET BE FIRMLY GROUNDED'
+	  0F84	45 41 54 20
+	  0F88	4D 49 4E 44
+	  0F8C	20 43 41 4E
+	  0F90	20 53 4F 41
+	  0F94	52 20 48 49
+	  0F98	47 48 20 49
+	  0F9C	4E 20 49 4D
+	  0FA0	41 47 49 4E
+	  0FA4	41 54 49 4F
+	  0FA8	4E 20 59 45
+	  0FAC	54 20 42 45
+	  0FB0	20 46 49 52
+	  0FB4	4D 4C 59 20
+	  0FB8	47 52 4F 55
+	  0FBC	4E 44 45 44
+  140:				END
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+
+
+
+
+
+
+
+
+                     register banks used:  ---
+
+                     no errors
+
+
+
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
+
+
+
+
+
+	       L I S T   O F   S Y M B O L S
+	       =============================
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+??ASEM_51			  NUMBER    8051
+??VERSION			  NUMBER    0130
+AC				  BIT	      D6
+ACC				  DATA	      E0
+B				  DATA	      F0
+BUSY				  CODE	    009D	  96
+CLEAR				  CODE	    00C4	 121
+COMMAND				  CODE	    0088	  83
+CY				  BIT	      D7
+DELAY				  CODE	    00B7	 113
+DISPLAY				  CODE	    00A8	 104
+DPH				  DATA	      83
+DPL				  DATA	      82
+EA				  BIT	      AF
+ES				  BIT	      AC
+ET0				  BIT	      A9
+ET1				  BIT	      AB
+EX0				  BIT	      A8
+EX1				  BIT	      AA
+EXTI0				  CODE	    0003
+EXTI1				  CODE	    0013
+F0				  BIT	      D5
+HERE				  CODE	    0086	  78
+IE				  DATA	      A8
+IE0				  BIT	      89
+IE1				  BIT	      8B
+INIT				  CODE	    0039	  27
+INT0				  BIT	      B2
+INT1				  BIT	      B3
+IP				  DATA	      B8
+IT0				  BIT	      88
+IT1				  BIT	      8A
+LINE1				  CODE	    00CA	 125
+LINE2				  CODE	    00D0	 129
+LOOP				  CODE	    0056	  46
+NEXT				  CODE	    007B	  67
+OV				  BIT	      D2
+P				  BIT	      D0
+P0				  DATA	      80
+P1				  DATA	      90
+P2				  DATA	      A0
+P3				  DATA	      B0
+PCON				  DATA	      87
+PS				  BIT	      BC
+PSW				  DATA	      D0
+PT0				  BIT	      B9
+PT1				  BIT	      BB
+PX0				  BIT	      B8
+PX1				  BIT	      BA
+RB8				  BIT	      9A
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 6
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+RD				  BIT	      B7
+READY				  CODE	    0097	  93
+REN				  BIT	      9C
+RESET				  CODE	    0000
+REWRT				  CODE	    004D	  40
+RI				  BIT	      98
+RS0				  BIT	      D3
+RS1				  BIT	      D4
+RXD				  BIT	      B0
+SBUF				  DATA	      99
+SCON				  DATA	      98
+SINT				  CODE	    0023
+SIP1				  CODE	    0069	  57
+SKIP				  CODE	    007E	  71
+SM0				  BIT	      9F
+SM1				  BIT	      9E
+SM2				  BIT	      9D
+SP				  DATA	      81
+START				  CODE	    0030	  18
+T0				  BIT	      B4
+T1				  BIT	      B5
+TB8				  BIT	      9B
+TCON				  DATA	      88
+TF0				  BIT	      8D
+TF1				  BIT	      8F
+TH0				  DATA	      8C
+TH1				  DATA	      8D
+TI				  BIT	      99
+TIMER0				  CODE	    000B
+TIMER1				  CODE	    001B
+TL0				  DATA	      8A
+TL1				  DATA	      8B
+TMOD				  DATA	      89
+TR0				  BIT	      8C
+TR1				  BIT	      8E
+TXD				  BIT	      B1
+WAITA				  CODE	    00BD	 116
+WAITB				  CODE	    00BB	 115
+WAITC				  CODE	    00B9	 114
+WR				  BIT	      B6

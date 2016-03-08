@@ -1,0 +1,254 @@
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 1
+
+
+
+
+
+       MCS-51 Family Macro Assembler   A S E M - 5 1   V 1.3
+       =====================================================
+
+
+
+	Source File:	stepp.asm
+	Object File:	stepp.hex
+	List File:	stepp.lst
+
+
+
+ Line  I  Addr  Code            Source
+
+    1:				;Least possible delay- 0C * 0FF = 0BF4 in the delay loop.
+    2:				; Interrupt usage A0001
+    3:
+    4:
+    5:		N      0000	ORG 0000H
+    6:	  0000	80 2E		SJMP 0030H
+    7:
+    8:
+    9:
+   10:		N      0003	ORG 0003H
+   11:	  0003	02 02 FF	LJMP 02FFH
+   12:
+   13:
+   14:
+   15:
+   16:		N      0030	ORG 0030H
+   17:
+   18:	  0030			START:	;MOV P3,#0FFH
+   19:	  0030	75 A8 81	INTEN:  MOV IE,#81H	; Enabling ext-int0 - 1000-0001B
+   20:	  0033	75 B8 01		MOV IP,#01H	; Setting high priority to ext-int0
+   21:	  0036	75 88 01		MOV TCON,#01H	; Setting TCON.0 high enables falling edge interrupt triggering
+   22:
+   23:
+   24:
+   25:
+   26:					;MOV R3,#05H
+   27:
+   28:
+   29:
+   30:	  0039			CLOCKW:	;MOV R4,#0CH
+   31:
+   32:	  0039	75 A0 01	NEXTA:	MOV P2,#01H; coil A +
+   33:	  003C	11 4F			ACALL DELAY
+   34:	  003E	75 A0 04		MOV P2,#04H; coil B +
+   35:	  0041	11 4F			ACALL DELAY
+   36:	  0043	75 A0 02		MOV P2,#02H; coil A -
+   37:	  0046	11 4F			ACALL DELAY
+   38:	  0048	75 A0 08		MOV P2,#08H; coil b -
+   39:	  004B	11 4F			ACALL DELAY
+   40:
+   41:					;DJNZ R4,NEXTA
+   42:					;DJNZ R3,CLOCKW
+   43:	  004D	80 EA			SJMP NEXTA
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
+
+
+
+ Line  I  Addr  Code            Source
+
+   44:
+   45:
+   46:
+   47:
+   48:
+   49:
+   50:	  004F			DELAY:  ;MOV R7,#00H
+   51:	  004F	7E 18		WAITC:	MOV R6,#18H
+   52:	  0051	7D FF		WAITB:	MOV R5,#0FFH
+   53:	  0053	DD FE		WAITA:	DJNZ R5,WAITA
+   54:	  0055	DE FA			DJNZ R6,WAITB
+   55:					;DJNZ R7,WAITC
+   56:	  0057	22			RET
+   57:
+   58:
+   59:
+   60:	  0058	00		NOP
+   61:	  0059	00		NOP
+   62:	  005A	00		NOP
+   63:	  005B	00		NOP
+   64:	  005C	00		HALT: 	NOP
+   65:	  005D	80 FD			SJMP HALT
+   66:
+   67:
+   68:
+   69:
+   70:
+   71:
+   72:		N      02FF	ORG 02FFH                        ; INTERRUPT SERVICE SUBROUTINE FOR INT-EXT0
+   73:
+   74:	  02FF	7B 03		INTSR:	MOV R3,#03H
+   75:
+   76:	  0301	7C 0C		CCLOCKW:MOV R4,#0CH
+   77:
+   78:	  0303	75 A0 08	NEXTB:	MOV P2,#08H; coil b -
+   79:	  0306	71 1C			ACALL DELAYB
+   80:	  0308	75 A0 02		MOV P2,#02H; coil A -
+   81:	  030B	71 1C			ACALL DELAYB
+   82:	  030D	75 A0 04		MOV P2,#04H; coil B +
+   83:	  0310	71 1C			ACALL DELAYB
+   84:	  0312	75 A0 01		MOV P2,#01H; coil A +
+   85:	  0315	71 1C			ACALL DELAYB
+   86:	  0317	DC EA			DJNZ R4,NEXTB
+   87:	  0319	DB E6			DJNZ R3,CCLOCKW
+   88:	  031B	32			RETI
+   89:
+   90:
+   91:
+   92:
+   93:	  031C			DELAYB: ;MOV R7,#00H
+   94:	  031C	7E 30		WAITCB:	MOV R6,#30H
+   95:	  031E	7D FF		WAITBB:	MOV R5,#0FFH
+   96:	  0320	DD FE		WAITAB:	DJNZ R5,WAITAB
+   97:	  0322	DE FA			DJNZ R6,WAITBB
+   98:					;DJNZ R7,WAITCB
+   99:	  0324	22			RET
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+
+
+
+ Line  I  Addr  Code            Source
+
+  100:
+  101:
+  102:				END
+
+
+
+
+
+                     register banks used:  ---
+
+                     no errors
+
+
+
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+
+
+
+
+
+	       L I S T   O F   S Y M B O L S
+	       =============================
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+??ASEM_51			  NUMBER    8051
+??VERSION			  NUMBER    0130
+AC				  BIT	      D6
+ACC				  DATA	      E0
+B				  DATA	      F0
+CCLOCKW				  CODE	    0301	  76
+CLOCKW				  CODE	    0039	  30
+CY				  BIT	      D7
+DELAY				  CODE	    004F	  50
+DELAYB				  CODE	    031C	  93
+DPH				  DATA	      83
+DPL				  DATA	      82
+EA				  BIT	      AF
+ES				  BIT	      AC
+ET0				  BIT	      A9
+ET1				  BIT	      AB
+EX0				  BIT	      A8
+EX1				  BIT	      AA
+EXTI0				  CODE	    0003
+EXTI1				  CODE	    0013
+F0				  BIT	      D5
+HALT				  CODE	    005C	  64
+IE				  DATA	      A8
+IE0				  BIT	      89
+IE1				  BIT	      8B
+INT0				  BIT	      B2
+INT1				  BIT	      B3
+INTEN				  CODE	    0030	  19
+INTSR				  CODE	    02FF	  74
+IP				  DATA	      B8
+IT0				  BIT	      88
+IT1				  BIT	      8A
+NEXTA				  CODE	    0039	  32
+NEXTB				  CODE	    0303	  78
+OV				  BIT	      D2
+P				  BIT	      D0
+P0				  DATA	      80
+P1				  DATA	      90
+P2				  DATA	      A0
+P3				  DATA	      B0
+PCON				  DATA	      87
+PS				  BIT	      BC
+PSW				  DATA	      D0
+PT0				  BIT	      B9
+PT1				  BIT	      BB
+PX0				  BIT	      B8
+PX1				  BIT	      BA
+RB8				  BIT	      9A
+RD				  BIT	      B7
+REN				  BIT	      9C
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+RESET				  CODE	    0000
+RI				  BIT	      98
+RS0				  BIT	      D3
+RS1				  BIT	      D4
+RXD				  BIT	      B0
+SBUF				  DATA	      99
+SCON				  DATA	      98
+SINT				  CODE	    0023
+SM0				  BIT	      9F
+SM1				  BIT	      9E
+SM2				  BIT	      9D
+SP				  DATA	      81
+START				  CODE	    0030	  18
+T0				  BIT	      B4
+T1				  BIT	      B5
+TB8				  BIT	      9B
+TCON				  DATA	      88
+TF0				  BIT	      8D
+TF1				  BIT	      8F
+TH0				  DATA	      8C
+TH1				  DATA	      8D
+TI				  BIT	      99
+TIMER0				  CODE	    000B
+TIMER1				  CODE	    001B
+TL0				  DATA	      8A
+TL1				  DATA	      8B
+TMOD				  DATA	      89
+TR0				  BIT	      8C
+TR1				  BIT	      8E
+TXD				  BIT	      B1
+WAITA				  CODE	    0053	  53
+WAITAB				  CODE	    0320	  96
+WAITB				  CODE	    0051	  52
+WAITBB				  CODE	    031E	  95
+WAITC				  CODE	    004F	  51
+WAITCB				  CODE	    031C	  94
+WR				  BIT	      B6

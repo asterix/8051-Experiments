@@ -1,0 +1,474 @@
+A51 MACRO ASSEMBLER  SERVO                                                                04/29/2009 16:47:17 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.01
+OBJECT MODULE PLACED IN servo.OBJ
+ASSEMBLER INVOKED BY: E:\Program Files\Keil\C51\BIN\A51.EXE servo.asm SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ;ASTER 06/03/2009 1245
+                       2     ;TO BE ASSEMBLED IN KEIL MICROVISION V3.60
+                       3     ;ARTIFICIAL INTELLIGENCE
+                       4     ;MICROCOMPUTER B   SERVO
+                       5     
+                       6     
+                       7     ;------------------------------------------------------------------------------------------
+                             -----------------
+                       8     ;SET THE ASSEMBLER FOR AT89S52
+                       9     $nomod51 
+                      10     ;$include (AT89X52.h)
+                +1    11     
+                +1    12     
+                +1    13     
+                +1    14     
+                +1    15     
+                +1    16     
+                +1    17     
+                +1    18     
+                +1    19     
+                +1    20     
+                +1    21     
+                +1    22     
+                +1    23     
+                +1    24     
+  0080          +1    25     sfr P0      = 0x80;
+  0081          +1    26     sfr SP      = 0x81;
+  0082          +1    27     sfr DPL     = 0x82;
+  0083          +1    28     sfr DPH     = 0x83;
+  0087          +1    29     sfr PCON    = 0x87;
+  0088          +1    30     sfr TCON    = 0x88;
+  0089          +1    31     sfr TMOD    = 0x89;
+  008A          +1    32     sfr TL0     = 0x8A;
+  008B          +1    33     sfr TL1     = 0x8B;
+  008C          +1    34     sfr TH0     = 0x8C;
+  008D          +1    35     sfr TH1     = 0x8D;
+  0090          +1    36     sfr P1      = 0x90;
+  0098          +1    37     sfr SCON    = 0x98;
+  0099          +1    38     sfr SBUF    = 0x99;
+  00A0          +1    39     sfr P2      = 0xA0;
+  00A8          +1    40     sfr IE      = 0xA8;
+  00B0          +1    41     sfr P3      = 0xB0;
+  00B8          +1    42     sfr IP      = 0xB8;
+  00C8          +1    43     sfr T2CON   = 0xC8;
+  00C9          +1    44     sfr T2MOD   = 0xC9;
+  00CA          +1    45     sfr RCAP2L  = 0xCA;
+  00CB          +1    46     sfr RCAP2H  = 0xCB;
+  00CC          +1    47     sfr TL2     = 0xCC;
+  00CD          +1    48     sfr TH2     = 0xCD;
+  00D0          +1    49     sfr PSW     = 0xD0;
+  00E0          +1    50     sfr ACC     = 0xE0;
+  00F0          +1    51     sfr B       = 0xF0;
+                +1    52     
+                +1    53     
+                +1    54     
+                +1    55     
+  0080          +1    56     sbit P0_0 = 0x80;
+  0081          +1    57     sbit P0_1 = 0x81;
+A51 MACRO ASSEMBLER  SERVO                                                                04/29/2009 16:47:17 PAGE     2
+
+  0082          +1    58     sbit P0_2 = 0x82;
+  0083          +1    59     sbit P0_3 = 0x83;
+  0084          +1    60     sbit P0_4 = 0x84;
+  0085          +1    61     sbit P0_5 = 0x85;
+  0086          +1    62     sbit P0_6 = 0x86;
+  0087          +1    63     sbit P0_7 = 0x87;
+                +1    64     
+                +1    65     
+                +1    66     
+                +1    67     
+                +1    68     
+                +1    69     
+                +1    70     
+                +1    71     
+                +1    72     
+                +1    73     
+                +1    74     
+                +1    75     
+                +1    76     
+                +1    77     
+                +1    78     
+                +1    79     
+  0088          +1    80     sbit IT0  = 0x88;
+  0089          +1    81     sbit IE0  = 0x89;
+  008A          +1    82     sbit IT1  = 0x8A;
+  008B          +1    83     sbit IE1  = 0x8B;
+  008C          +1    84     sbit TR0  = 0x8C;
+  008D          +1    85     sbit TF0  = 0x8D;
+  008E          +1    86     sbit TR1  = 0x8E;
+  008F          +1    87     sbit TF1  = 0x8F;
+                +1    88     
+                +1    89     
+                +1    90     
+                +1    91     
+                +1    92     
+                +1    93     
+                +1    94     
+                +1    95     
+                +1    96     
+                +1    97     
+                +1    98     
+                +1    99     
+                +1   100     
+                +1   101     
+                +1   102     
+                +1   103     
+                +1   104     
+                +1   105     
+                +1   106     
+  0090          +1   107     sbit P1_0 = 0x90;
+  0091          +1   108     sbit P1_1 = 0x91;
+  0092          +1   109     sbit P1_2 = 0x92;
+  0093          +1   110     sbit P1_3 = 0x93;
+  0094          +1   111     sbit P1_4 = 0x94;
+  0095          +1   112     sbit P1_5 = 0x95;
+  0096          +1   113     sbit P1_6 = 0x96;
+  0097          +1   114     sbit P1_7 = 0x97;
+                +1   115     
+  0090          +1   116     sbit T2   = 0x90;       /* External input to Timer/Counter 2, clock out */
+  0091          +1   117     sbit T2EX = 0x91;       /* Timer/Counter 2 capture/reload trigger & dir ctl */
+                +1   118     
+                +1   119     
+                +1   120     
+                +1   121     
+  0098          +1   122     sbit RI   = 0x98;
+  0099          +1   123     sbit TI   = 0x99;
+A51 MACRO ASSEMBLER  SERVO                                                                04/29/2009 16:47:17 PAGE     3
+
+  009A          +1   124     sbit RB8  = 0x9A;
+  009B          +1   125     sbit TB8  = 0x9B;
+  009C          +1   126     sbit REN  = 0x9C;
+  009D          +1   127     sbit SM2  = 0x9D;
+  009E          +1   128     sbit SM1  = 0x9E;
+  009F          +1   129     sbit SM0  = 0x9F;
+                +1   130     
+                +1   131     
+                +1   132     
+                +1   133     
+  00A0          +1   134     sbit P2_0 = 0xA0;
+  00A1          +1   135     sbit P2_1 = 0xA1;
+  00A2          +1   136     sbit P2_2 = 0xA2;
+  00A3          +1   137     sbit P2_3 = 0xA3;
+  00A4          +1   138     sbit P2_4 = 0xA4;
+  00A5          +1   139     sbit P2_5 = 0xA5;
+  00A6          +1   140     sbit P2_6 = 0xA6;
+  00A7          +1   141     sbit P2_7 = 0xA7;
+                +1   142     
+                +1   143     
+                +1   144     
+                +1   145     
+  00A8          +1   146     sbit EX0  = 0xA8;       /* 1=Enable External interrupt 0 */
+  00A9          +1   147     sbit ET0  = 0xA9;       /* 1=Enable Timer 0 interrupt */
+  00AA          +1   148     sbit EX1  = 0xAA;       /* 1=Enable External interrupt 1 */
+  00AB          +1   149     sbit ET1  = 0xAB;       /* 1=Enable Timer 1 interrupt */
+  00AC          +1   150     sbit ES   = 0xAC;       /* 1=Enable Serial port interrupt */
+  00AD          +1   151     sbit ET2  = 0xAD;       /* 1=Enable Timer 2 interrupt */
+                +1   152     
+  00AF          +1   153     sbit EA   = 0xAF;       /* 0=Disable all interrupts */
+                +1   154     
+                +1   155     
+                +1   156     
+                +1   157     
+  00B0          +1   158     sbit P3_0 = 0xB0;
+  00B1          +1   159     sbit P3_1 = 0xB1;
+  00B2          +1   160     sbit P3_2 = 0xB2;
+  00B3          +1   161     sbit P3_3 = 0xB3;
+  00B4          +1   162     sbit P3_4 = 0xB4;
+  00B5          +1   163     sbit P3_5 = 0xB5;
+  00B6          +1   164     sbit P3_6 = 0xB6;
+  00B7          +1   165     sbit P3_7 = 0xB7;
+                +1   166     
+  00B0          +1   167     sbit RXD  = 0xB0;       /* Serial data input */
+  00B1          +1   168     sbit TXD  = 0xB1;       /* Serial data output */
+  00B2          +1   169     sbit INT0 = 0xB2;       /* External interrupt 0 */
+  00B3          +1   170     sbit INT1 = 0xB3;       /* External interrupt 1 */
+  00B4          +1   171     sbit T0   = 0xB4;       /* Timer 0 external input */
+  00B5          +1   172     sbit T1   = 0xB5;       /* Timer 1 external input */
+  00B6          +1   173     sbit WR   = 0xB6;       /* External data memory write strobe */
+  00B7          +1   174     sbit RD   = 0xB7;       /* External data memory read strobe */
+                +1   175     
+                +1   176     
+                +1   177     
+                +1   178     
+  00B8          +1   179     sbit PX0  = 0xB8;
+  00B9          +1   180     sbit PT0  = 0xB9;
+  00BA          +1   181     sbit PX1  = 0xBA;
+  00BB          +1   182     sbit PT1  = 0xBB;
+  00BC          +1   183     sbit PS   = 0xBC;
+  00BD          +1   184     sbit PT2  = 0xBD;
+                +1   185     
+                +1   186     
+                +1   187     
+                +1   188     
+  00C8          +1   189     sbit CP_RL2= 0xC8;      /* 0=Reload, 1=Capture select */
+A51 MACRO ASSEMBLER  SERVO                                                                04/29/2009 16:47:17 PAGE     4
+
+  00C9          +1   190     sbit C_T2 = 0xC9;       /* 0=Timer, 1=Counter */
+  00CA          +1   191     sbit TR2  = 0xCA;       /* 0=Stop timer, 1=Start timer */
+  00CB          +1   192     sbit EXEN2= 0xCB;       /* Timer 2 external enable */
+  00CC          +1   193     sbit TCLK = 0xCC;       /* 0=Serial clock uses Timer 1 overflow, 1=Timer 2 */
+  00CD          +1   194     sbit RCLK = 0xCD;       /* 0=Serial clock uses Timer 1 overflow, 1=Timer 2 */
+  00CE          +1   195     sbit EXF2 = 0xCE;       /* Timer 2 external flag */
+  00CF          +1   196     sbit TF2  = 0xCF;       /* Timer 2 overflow flag */
+                +1   197     
+                +1   198     
+                +1   199     
+                +1   200     
+                +1   201     
+                +1   202     
+                +1   203     
+                +1   204     
+                +1   205     
+                +1   206     
+  00D0          +1   207     sbit P    = 0xD0;
+  00D1          +1   208     sbit F1   = 0xD1;
+  00D2          +1   209     sbit OV   = 0xD2;
+  00D3          +1   210     sbit RS0  = 0xD3;
+  00D4          +1   211     sbit RS1  = 0xD4;
+  00D5          +1   212     sbit F0   = 0xD5;
+  00D6          +1   213     sbit AC   = 0xD6;
+  00D7          +1   214     sbit CY   = 0xD7;
+                +1   215     
+                +1   216     
+                +1   217     
+                +1   218     
+                +1   219     
+                +1   220     
+                +1   221     
+                +1   222     
+                +1   223     
+                +1   224     
+                +1   225     
+                +1   226     
+                +1   227     
+                +1   228     
+                +1   229     
+                +1   230     
+                +1   231     
+                     232     
+                     233     
+                     234     ;------------------------------------------------------------------------------------------
+                             -----------------
+                     235     
+0000                 236     ORG 0000H
+                     237     
+0000 802E            238     RESET:          SJMP 0030H 
+                     239     
+0030                 240     ORG 0030H
+                     241     
+0030 00              242     START:          NOP
+0031 758110          243                             MOV SP,#10H                       ;RELOCATE STACK OVER 10H
+0034 758910          244                             MOV TMOD,#10H
+0037 C28F            245                             CLR TF1
+0039 C290            246                             CLR P1.0
+003B 1200A6          247                             LCALL DELAYH
+                     248                                                                     
+003E 7E05            249                             MOV R6,#05H
+0040 7F02            250     AGAIN:          MOV R7,#02H
+0042 C290            251     N45MS:          CLR P1.0
+0044 C28E            252                             CLR TR1
+0046 C28F            253                             CLR TF1
+0048 758D5D          254                             MOV TH1,#5DH
+A51 MACRO ASSEMBLER  SERVO                                                                04/29/2009 16:47:17 PAGE     5
+
+004B 758BFD          255                             MOV TL1,#0FDH
+004E D28E            256                             SETB TR1
+0050 308FFD          257     WAITH:          JNB TF1,WAITH
+0053 C28F            258                             CLR TF1
+0055 DFEB            259                             DJNZ R7,N45MS
+0057 C28E            260                             CLR TR1
+0059 758DFD          261                             MOV TH1,#0FDH
+005C 758BD7          262                             MOV TL1,#0D7H
+005F D290            263                             SETB P1.0
+0061 D28E            264                             SETB TR1
+0063 308FFD          265     WAITL:          JNB TF1,WAITL   
+0066 DED8            266                             DJNZ R6,AGAIN
+                     267                             
+0068 1200A6          268                             LCALL DELAYH
+006B 1200A6          269                             LCALL DELAYH
+006E 1200A6          270                             LCALL DELAYH
+                     271                             
+                     272                                                     
+0071 7E08            273                             MOV R6,#08H
+0073 C28E            274     AGAINC:         CLR TR1
+0075 758DE2          275                             MOV TH1,#0E2H
+0078 758BD7          276                             MOV TL1,#0D7H
+007B D290            277                             SETB P1.0
+007D D28E            278                             SETB TR1
+007F 308FFD          279     WAITLC:         JNB TF1,WAITLC
+0082 7F02            280                             MOV R7,#02H
+0084 C290            281     N45MSC:         CLR P1.0
+0086 C28E            282                             CLR TR1
+0088 C28F            283                             CLR TF1
+008A 758D5D          284                             MOV TH1,#5DH
+008D 758BFD          285                             MOV TL1,#0FDH
+0090 D28E            286                             SETB TR1
+0092 308FFD          287     WAITHC:         JNB TF1,WAITHC
+0095 C28F            288                             CLR TF1
+0097 DFEB            289                             DJNZ R7,N45MSC
+0099 DED8            290                             DJNZ R6,AGAINC
+                     291     
+009B 80FE            292     HERE:           SJMP HERE
+                     293     
+                     294     
+009D 7F48            295     DELAYL:         MOV R7,#72
+009F 7EFF            296                             MOV R6,#0FFH
+00A1 DEFE            297                             DJNZ R6,$
+00A3 DFFC            298                             DJNZ R7,$-2
+00A5 22              299                             RET
+                     300     
+00A6 7F0F            301     DELAYH:         MOV R7,#0FH
+00A8 7EFF            302                             MOV R6,#0FFH
+00AA 7DFF            303                             MOV R5,#0FFH
+00AC DDFE            304                             DJNZ R5,$
+00AE DEFC            305                             DJNZ R6,$-2
+00B0 DFFA            306                             DJNZ R7,$-4
+00B2 22              307                             RET
+                     308                             
+                     309                              
+                     310     END
+A51 MACRO ASSEMBLER  SERVO                                                                04/29/2009 16:47:17 PAGE     6
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+AC . . . . . . . .  B ADDR   00D0H.6 A   
+ACC. . . . . . . .  D ADDR   00E0H   A   
+AGAIN. . . . . . .  C ADDR   0040H   A   
+AGAINC . . . . . .  C ADDR   0073H   A   
+B. . . . . . . . .  D ADDR   00F0H   A   
+CP_RL2 . . . . . .  B ADDR   00C8H.0 A   
+CY . . . . . . . .  B ADDR   00D0H.7 A   
+C_T2 . . . . . . .  B ADDR   00C8H.1 A   
+DELAYH . . . . . .  C ADDR   00A6H   A   
+DELAYL . . . . . .  C ADDR   009DH   A   
+DPH. . . . . . . .  D ADDR   0083H   A   
+DPL. . . . . . . .  D ADDR   0082H   A   
+EA . . . . . . . .  B ADDR   00A8H.7 A   
+ES . . . . . . . .  B ADDR   00A8H.4 A   
+ET0. . . . . . . .  B ADDR   00A8H.1 A   
+ET1. . . . . . . .  B ADDR   00A8H.3 A   
+ET2. . . . . . . .  B ADDR   00A8H.5 A   
+EX0. . . . . . . .  B ADDR   00A8H.0 A   
+EX1. . . . . . . .  B ADDR   00A8H.2 A   
+EXEN2. . . . . . .  B ADDR   00C8H.3 A   
+EXF2 . . . . . . .  B ADDR   00C8H.6 A   
+F0 . . . . . . . .  B ADDR   00D0H.5 A   
+F1 . . . . . . . .  B ADDR   00D0H.1 A   
+HERE . . . . . . .  C ADDR   009BH   A   
+IE . . . . . . . .  D ADDR   00A8H   A   
+IE0. . . . . . . .  B ADDR   0088H.1 A   
+IE1. . . . . . . .  B ADDR   0088H.3 A   
+INT0 . . . . . . .  B ADDR   00B0H.2 A   
+INT1 . . . . . . .  B ADDR   00B0H.3 A   
+IP . . . . . . . .  D ADDR   00B8H   A   
+IT0. . . . . . . .  B ADDR   0088H.0 A   
+IT1. . . . . . . .  B ADDR   0088H.2 A   
+N45MS. . . . . . .  C ADDR   0042H   A   
+N45MSC . . . . . .  C ADDR   0084H   A   
+OV . . . . . . . .  B ADDR   00D0H.2 A   
+P. . . . . . . . .  B ADDR   00D0H.0 A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P0_0 . . . . . . .  B ADDR   0080H.0 A   
+P0_1 . . . . . . .  B ADDR   0080H.1 A   
+P0_2 . . . . . . .  B ADDR   0080H.2 A   
+P0_3 . . . . . . .  B ADDR   0080H.3 A   
+P0_4 . . . . . . .  B ADDR   0080H.4 A   
+P0_5 . . . . . . .  B ADDR   0080H.5 A   
+P0_6 . . . . . . .  B ADDR   0080H.6 A   
+P0_7 . . . . . . .  B ADDR   0080H.7 A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P1_0 . . . . . . .  B ADDR   0090H.0 A   
+P1_1 . . . . . . .  B ADDR   0090H.1 A   
+P1_2 . . . . . . .  B ADDR   0090H.2 A   
+P1_3 . . . . . . .  B ADDR   0090H.3 A   
+P1_4 . . . . . . .  B ADDR   0090H.4 A   
+P1_5 . . . . . . .  B ADDR   0090H.5 A   
+P1_6 . . . . . . .  B ADDR   0090H.6 A   
+P1_7 . . . . . . .  B ADDR   0090H.7 A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P2_0 . . . . . . .  B ADDR   00A0H.0 A   
+P2_1 . . . . . . .  B ADDR   00A0H.1 A   
+P2_2 . . . . . . .  B ADDR   00A0H.2 A   
+P2_3 . . . . . . .  B ADDR   00A0H.3 A   
+P2_4 . . . . . . .  B ADDR   00A0H.4 A   
+A51 MACRO ASSEMBLER  SERVO                                                                04/29/2009 16:47:17 PAGE     7
+
+P2_5 . . . . . . .  B ADDR   00A0H.5 A   
+P2_6 . . . . . . .  B ADDR   00A0H.6 A   
+P2_7 . . . . . . .  B ADDR   00A0H.7 A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+P3_0 . . . . . . .  B ADDR   00B0H.0 A   
+P3_1 . . . . . . .  B ADDR   00B0H.1 A   
+P3_2 . . . . . . .  B ADDR   00B0H.2 A   
+P3_3 . . . . . . .  B ADDR   00B0H.3 A   
+P3_4 . . . . . . .  B ADDR   00B0H.4 A   
+P3_5 . . . . . . .  B ADDR   00B0H.5 A   
+P3_6 . . . . . . .  B ADDR   00B0H.6 A   
+P3_7 . . . . . . .  B ADDR   00B0H.7 A   
+PCON . . . . . . .  D ADDR   0087H   A   
+PS . . . . . . . .  B ADDR   00B8H.4 A   
+PSW. . . . . . . .  D ADDR   00D0H   A   
+PT0. . . . . . . .  B ADDR   00B8H.1 A   
+PT1. . . . . . . .  B ADDR   00B8H.3 A   
+PT2. . . . . . . .  B ADDR   00B8H.5 A   
+PX0. . . . . . . .  B ADDR   00B8H.0 A   
+PX1. . . . . . . .  B ADDR   00B8H.2 A   
+RB8. . . . . . . .  B ADDR   0098H.2 A   
+RCAP2H . . . . . .  D ADDR   00CBH   A   
+RCAP2L . . . . . .  D ADDR   00CAH   A   
+RCLK . . . . . . .  B ADDR   00C8H.5 A   
+RD . . . . . . . .  B ADDR   00B0H.7 A   
+REN. . . . . . . .  B ADDR   0098H.4 A   
+RESET. . . . . . .  C ADDR   0000H   A   
+RI . . . . . . . .  B ADDR   0098H.0 A   
+RS0. . . . . . . .  B ADDR   00D0H.3 A   
+RS1. . . . . . . .  B ADDR   00D0H.4 A   
+RXD. . . . . . . .  B ADDR   00B0H.0 A   
+SBUF . . . . . . .  D ADDR   0099H   A   
+SCON . . . . . . .  D ADDR   0098H   A   
+SM0. . . . . . . .  B ADDR   0098H.7 A   
+SM1. . . . . . . .  B ADDR   0098H.6 A   
+SM2. . . . . . . .  B ADDR   0098H.5 A   
+SP . . . . . . . .  D ADDR   0081H   A   
+START. . . . . . .  C ADDR   0030H   A   
+T0 . . . . . . . .  B ADDR   00B0H.4 A   
+T1 . . . . . . . .  B ADDR   00B0H.5 A   
+T2 . . . . . . . .  B ADDR   0090H.0 A   
+T2CON. . . . . . .  D ADDR   00C8H   A   
+T2EX . . . . . . .  B ADDR   0090H.1 A   
+T2MOD. . . . . . .  D ADDR   00C9H   A   
+TB8. . . . . . . .  B ADDR   0098H.3 A   
+TCLK . . . . . . .  B ADDR   00C8H.4 A   
+TCON . . . . . . .  D ADDR   0088H   A   
+TF0. . . . . . . .  B ADDR   0088H.5 A   
+TF1. . . . . . . .  B ADDR   0088H.7 A   
+TF2. . . . . . . .  B ADDR   00C8H.7 A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TH1. . . . . . . .  D ADDR   008DH   A   
+TH2. . . . . . . .  D ADDR   00CDH   A   
+TI . . . . . . . .  B ADDR   0098H.1 A   
+TL0. . . . . . . .  D ADDR   008AH   A   
+TL1. . . . . . . .  D ADDR   008BH   A   
+TL2. . . . . . . .  D ADDR   00CCH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+TR1. . . . . . . .  B ADDR   0088H.6 A   
+TR2. . . . . . . .  B ADDR   00C8H.2 A   
+TXD. . . . . . . .  B ADDR   00B0H.1 A   
+WAITH. . . . . . .  C ADDR   0050H   A   
+WAITHC . . . . . .  C ADDR   0092H   A   
+WAITL. . . . . . .  C ADDR   0063H   A   
+WAITLC . . . . . .  C ADDR   007FH   A   
+A51 MACRO ASSEMBLER  SERVO                                                                04/29/2009 16:47:17 PAGE     8
+
+WR . . . . . . . .  B ADDR   00B0H.6 A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

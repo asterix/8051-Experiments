@@ -1,0 +1,883 @@
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.01
+OBJECT MODULE PLACED IN Acomp REV3.OBJ
+ASSEMBLER INVOKED BY: E:\Program Files\Keil\C51\BIN\A51.EXE Acomp REV3.asm NOMOD51 SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ;ASTER 01/03/2009 1545
+                       2     ;TO BE ASSEMBLED IN KEIL MICROVISION V3.60
+                       3     ;ARTIFICIAL INTELLIGENCE
+                       4     ;MICROCOMPUTER A
+                       5     
+                       6     ;CODE BASE COMPLETED : 02/03/2009 2120
+                       7     
+                       8     ;REV 3 LAST UPDATED 08/03/2009 2230
+                       9     
+                      10     ;------------------------------------------------------------------------------------------
+                             -----------------
+                      11     ;SET THE ASSEMBLER FOR AT89S52
+                      12     $nomod51 
+                      13     ;$include (AT89X52.h)
+                +1    14     
+                +1    15     
+                +1    16     
+                +1    17     
+                +1    18     
+                +1    19     
+                +1    20     
+                +1    21     
+                +1    22     
+                +1    23     
+                +1    24     
+                +1    25     
+                +1    26     
+                +1    27     
+  0080          +1    28     sfr P0      = 0x80;
+  0081          +1    29     sfr SP      = 0x81;
+  0082          +1    30     sfr DPL     = 0x82;
+  0083          +1    31     sfr DPH     = 0x83;
+  0087          +1    32     sfr PCON    = 0x87;
+  0088          +1    33     sfr TCON    = 0x88;
+  0089          +1    34     sfr TMOD    = 0x89;
+  008A          +1    35     sfr TL0     = 0x8A;
+  008B          +1    36     sfr TL1     = 0x8B;
+  008C          +1    37     sfr TH0     = 0x8C;
+  008D          +1    38     sfr TH1     = 0x8D;
+  0090          +1    39     sfr P1      = 0x90;
+  0098          +1    40     sfr SCON    = 0x98;
+  0099          +1    41     sfr SBUF    = 0x99;
+  00A0          +1    42     sfr P2      = 0xA0;
+  00A8          +1    43     sfr IE      = 0xA8;
+  00B0          +1    44     sfr P3      = 0xB0;
+  00B8          +1    45     sfr IP      = 0xB8;
+  00C8          +1    46     sfr T2CON   = 0xC8;
+  00C9          +1    47     sfr T2MOD   = 0xC9;
+  00CA          +1    48     sfr RCAP2L  = 0xCA;
+  00CB          +1    49     sfr RCAP2H  = 0xCB;
+  00CC          +1    50     sfr TL2     = 0xCC;
+  00CD          +1    51     sfr TH2     = 0xCD;
+  00D0          +1    52     sfr PSW     = 0xD0;
+  00E0          +1    53     sfr ACC     = 0xE0;
+  00F0          +1    54     sfr B       = 0xF0;
+                +1    55     
+                +1    56     
+                +1    57     
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE     2
+
+                +1    58     
+  0080          +1    59     sbit P0_0 = 0x80;
+  0081          +1    60     sbit P0_1 = 0x81;
+  0082          +1    61     sbit P0_2 = 0x82;
+  0083          +1    62     sbit P0_3 = 0x83;
+  0084          +1    63     sbit P0_4 = 0x84;
+  0085          +1    64     sbit P0_5 = 0x85;
+  0086          +1    65     sbit P0_6 = 0x86;
+  0087          +1    66     sbit P0_7 = 0x87;
+                +1    67     
+                +1    68     
+                +1    69     
+                +1    70     
+                +1    71     
+                +1    72     
+                +1    73     
+                +1    74     
+                +1    75     
+                +1    76     
+                +1    77     
+                +1    78     
+                +1    79     
+                +1    80     
+                +1    81     
+                +1    82     
+  0088          +1    83     sbit IT0  = 0x88;
+  0089          +1    84     sbit IE0  = 0x89;
+  008A          +1    85     sbit IT1  = 0x8A;
+  008B          +1    86     sbit IE1  = 0x8B;
+  008C          +1    87     sbit TR0  = 0x8C;
+  008D          +1    88     sbit TF0  = 0x8D;
+  008E          +1    89     sbit TR1  = 0x8E;
+  008F          +1    90     sbit TF1  = 0x8F;
+                +1    91     
+                +1    92     
+                +1    93     
+                +1    94     
+                +1    95     
+                +1    96     
+                +1    97     
+                +1    98     
+                +1    99     
+                +1   100     
+                +1   101     
+                +1   102     
+                +1   103     
+                +1   104     
+                +1   105     
+                +1   106     
+                +1   107     
+                +1   108     
+                +1   109     
+  0090          +1   110     sbit P1_0 = 0x90;
+  0091          +1   111     sbit P1_1 = 0x91;
+  0092          +1   112     sbit P1_2 = 0x92;
+  0093          +1   113     sbit P1_3 = 0x93;
+  0094          +1   114     sbit P1_4 = 0x94;
+  0095          +1   115     sbit P1_5 = 0x95;
+  0096          +1   116     sbit P1_6 = 0x96;
+  0097          +1   117     sbit P1_7 = 0x97;
+                +1   118     
+  0090          +1   119     sbit T2   = 0x90;       /* External input to Timer/Counter 2, clock out */
+  0091          +1   120     sbit T2EX = 0x91;       /* Timer/Counter 2 capture/reload trigger & dir ctl */
+                +1   121     
+                +1   122     
+                +1   123     
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE     3
+
+                +1   124     
+  0098          +1   125     sbit RI   = 0x98;
+  0099          +1   126     sbit TI   = 0x99;
+  009A          +1   127     sbit RB8  = 0x9A;
+  009B          +1   128     sbit TB8  = 0x9B;
+  009C          +1   129     sbit REN  = 0x9C;
+  009D          +1   130     sbit SM2  = 0x9D;
+  009E          +1   131     sbit SM1  = 0x9E;
+  009F          +1   132     sbit SM0  = 0x9F;
+                +1   133     
+                +1   134     
+                +1   135     
+                +1   136     
+  00A0          +1   137     sbit P2_0 = 0xA0;
+  00A1          +1   138     sbit P2_1 = 0xA1;
+  00A2          +1   139     sbit P2_2 = 0xA2;
+  00A3          +1   140     sbit P2_3 = 0xA3;
+  00A4          +1   141     sbit P2_4 = 0xA4;
+  00A5          +1   142     sbit P2_5 = 0xA5;
+  00A6          +1   143     sbit P2_6 = 0xA6;
+  00A7          +1   144     sbit P2_7 = 0xA7;
+                +1   145     
+                +1   146     
+                +1   147     
+                +1   148     
+  00A8          +1   149     sbit EX0  = 0xA8;       /* 1=Enable External interrupt 0 */
+  00A9          +1   150     sbit ET0  = 0xA9;       /* 1=Enable Timer 0 interrupt */
+  00AA          +1   151     sbit EX1  = 0xAA;       /* 1=Enable External interrupt 1 */
+  00AB          +1   152     sbit ET1  = 0xAB;       /* 1=Enable Timer 1 interrupt */
+  00AC          +1   153     sbit ES   = 0xAC;       /* 1=Enable Serial port interrupt */
+  00AD          +1   154     sbit ET2  = 0xAD;       /* 1=Enable Timer 2 interrupt */
+                +1   155     
+  00AF          +1   156     sbit EA   = 0xAF;       /* 0=Disable all interrupts */
+                +1   157     
+                +1   158     
+                +1   159     
+                +1   160     
+  00B0          +1   161     sbit P3_0 = 0xB0;
+  00B1          +1   162     sbit P3_1 = 0xB1;
+  00B2          +1   163     sbit P3_2 = 0xB2;
+  00B3          +1   164     sbit P3_3 = 0xB3;
+  00B4          +1   165     sbit P3_4 = 0xB4;
+  00B5          +1   166     sbit P3_5 = 0xB5;
+  00B6          +1   167     sbit P3_6 = 0xB6;
+  00B7          +1   168     sbit P3_7 = 0xB7;
+                +1   169     
+  00B0          +1   170     sbit RXD  = 0xB0;       /* Serial data input */
+  00B1          +1   171     sbit TXD  = 0xB1;       /* Serial data output */
+  00B2          +1   172     sbit INT0 = 0xB2;       /* External interrupt 0 */
+  00B3          +1   173     sbit INT1 = 0xB3;       /* External interrupt 1 */
+  00B4          +1   174     sbit T0   = 0xB4;       /* Timer 0 external input */
+  00B5          +1   175     sbit T1   = 0xB5;       /* Timer 1 external input */
+  00B6          +1   176     sbit WR   = 0xB6;       /* External data memory write strobe */
+  00B7          +1   177     sbit RD   = 0xB7;       /* External data memory read strobe */
+                +1   178     
+                +1   179     
+                +1   180     
+                +1   181     
+  00B8          +1   182     sbit PX0  = 0xB8;
+  00B9          +1   183     sbit PT0  = 0xB9;
+  00BA          +1   184     sbit PX1  = 0xBA;
+  00BB          +1   185     sbit PT1  = 0xBB;
+  00BC          +1   186     sbit PS   = 0xBC;
+  00BD          +1   187     sbit PT2  = 0xBD;
+                +1   188     
+                +1   189     
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE     4
+
+                +1   190     
+                +1   191     
+  00C8          +1   192     sbit CP_RL2= 0xC8;      /* 0=Reload, 1=Capture select */
+  00C9          +1   193     sbit C_T2 = 0xC9;       /* 0=Timer, 1=Counter */
+  00CA          +1   194     sbit TR2  = 0xCA;       /* 0=Stop timer, 1=Start timer */
+  00CB          +1   195     sbit EXEN2= 0xCB;       /* Timer 2 external enable */
+  00CC          +1   196     sbit TCLK = 0xCC;       /* 0=Serial clock uses Timer 1 overflow, 1=Timer 2 */
+  00CD          +1   197     sbit RCLK = 0xCD;       /* 0=Serial clock uses Timer 1 overflow, 1=Timer 2 */
+  00CE          +1   198     sbit EXF2 = 0xCE;       /* Timer 2 external flag */
+  00CF          +1   199     sbit TF2  = 0xCF;       /* Timer 2 overflow flag */
+                +1   200     
+                +1   201     
+                +1   202     
+                +1   203     
+                +1   204     
+                +1   205     
+                +1   206     
+                +1   207     
+                +1   208     
+                +1   209     
+  00D0          +1   210     sbit P    = 0xD0;
+  00D1          +1   211     sbit F1   = 0xD1;
+  00D2          +1   212     sbit OV   = 0xD2;
+  00D3          +1   213     sbit RS0  = 0xD3;
+  00D4          +1   214     sbit RS1  = 0xD4;
+  00D5          +1   215     sbit F0   = 0xD5;
+  00D6          +1   216     sbit AC   = 0xD6;
+  00D7          +1   217     sbit CY   = 0xD7;
+                +1   218     
+                +1   219     
+                +1   220     
+                +1   221     
+                +1   222     
+                +1   223     
+                +1   224     
+                +1   225     
+                +1   226     
+                +1   227     
+                +1   228     
+                +1   229     
+                +1   230     
+                +1   231     
+                +1   232     
+                +1   233     
+                +1   234     
+                     235     
+                     236     
+                     237     ;DEFINITIONS
+                     238     
+                     239     ;SBIT WR=P3^6                                           ;ALREADY DEFINED IN THE HEADER, SO 
+                             MAKE FREE USE OF IT
+                     240     ;SBIT RD=P3^7
+  00B2               241     SBIT INTR=P3^2
+  0087               242     SBIT RS=P0^7
+  0086               243     SBIT RW=P0^6
+  0085               244     SBIT EN=P0^5
+  0084               245     SBIT SWA=P0^4
+  0083               246     SBIT SWB=P0^3
+  0082               247     SBIT SWC=P0^2
+  0081               248     SBIT SWD=P0^1
+                     249     ;------------------------------------------------------------------------------------------
+                             -----------------
+                     250     
+0000                 251     ORG 0000H
+                     252     
+0000 802E            253     RESET:          SJMP 0030H 
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE     5
+
+                     254     
+0030                 255     ORG 0030H
+                     256     
+0030 00              257     START:          NOP
+0031 758110          258                             MOV SP,#10H                                ;RELOCATE STACK OVER 10H
+                     259                                                                      
+0034 7438            260     INIT:           MOV A,#38H                                      ;INITIALIZATION OF HD44780
+0036 120128          261                             LCALL COMMAND
+0039 740C            262                             MOV A,#0CH
+003B 120128          263                             LCALL COMMAND
+003E 7438            264                             MOV A,#38H                                      ;REINITIALIZATION O
+                             F HD44780 FOR CAPACITIVE CORRECTION
+0040 120128          265                             LCALL COMMAND
+0043 740C            266                             MOV A,#0CH
+0045 120128          267                             LCALL COMMAND
+0048 7406            268                             MOV A,#06H
+004A 120128          269                             LCALL COMMAND
+004D 7401            270                             MOV A,#01H      
+004F 120128          271                             LCALL COMMAND
+                     272     
+0052 901F00          273                             MOV DPTR,#MSG1                          ;DISPLAY INITIAL DATA
+0055 120166          274                             LCALL WRITEALL
+                     275     
+0058 E4              276                             CLR A                                           ;PORTS'  INIT
+0059 74FF            277                             MOV A,#0FFH
+005B F5B0            278                             MOV P3,A
+005D D280            279                             SETB P0.0
+005F D281            280                             SETB P0.1
+0061 D282            281                             SETB P0.2
+0063 D283            282                             SETB P0.3
+0065 D284            283                             SETB P0.4
+0067 F590            284                             MOV P1,A
+                     285     
+0069 7820            286                             MOV R0,#20H                                     ;CLEAR RAM FROM 20H
+                              TO 7FH
+006B E4              287                             CLR A
+006C F6              288     CLE:            MOV @R0,A
+006D 08              289                             INC R0
+006E B87FFB          290                             CJNE R0,#7FH,CLE
+                     291     
+                     292                             
+0071 75C830          293                             MOV T2CON,#30H                          ;SERIAL BAUD GENERATOR INIT
+                              9600BPS TWI
+0074 75CBFF          294                             MOV RCAP2H,#0FFH
+0077 75CADC          295                             MOV RCAP2L,#0DCH
+007A 53877F          296                             ANL PCON,#7FH
+007D 759858          297                             MOV SCON,#58H
+                     298     
+                     299                             
+0080 758801          300                             MOV TCON,#01H
+0083 75A891          301                             MOV IE,#91H                                     ;INTERRUPTS ENABLE 
+                             : INT0, SERIAL
+0086 75B810          302                             MOV IP,#10H
+                     303                             
+0089 D2CA            304                             SETB TR2                                        ;START BAUD TIMER
+                     305     
+008B 901F0D          306                             MOV DPTR,#MSG2                          ;LOAD DISPLAY RAM WITH FORM
+                             AT
+008E 7830            307                             MOV R0,#30H
+0090 E4              308     DISPD:          CLR A
+0091 93              309                             MOVC A,@A+DPTR
+0092 6005            310                             JZ EXITDD
+0094 F6              311                             MOV @R0,A
+0095 08              312                             INC R0
+0096 A3              313                             INC DPTR
+0097 80F7            314                             SJMP DISPD
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE     6
+
+0099 00              315     EXITDD:         NOP
+                     316     
+                     317     
+009A D2D3            318                             SETB PSW.3
+009C 7860            319                             MOV R0,#60H
+009E C2D3            320                             CLR PSW.3
+                     321                             
+00A0 742E            322                             MOV A,#2EH
+00A2 120137          323                             LCALL DISPLAY                           ;DOT 1                  
+00A5 121220          324                             LCALL DELAYR                            ;ALLOW ADC0848 TO RECOVER F
+                             ROM RESET
+00A8 120137          325                             LCALL DISPLAY                           ;DOT 2
+00AB 7408            326     ADCINIT:        MOV A,#08H                                      ;START ADC OPERATION
+00AD F566            327                             MOV 66H,A
+00AF 120172          328                             LCALL ADWRITE
+00B2 121213          329                             LCALL DELAYS                            ;DELAY FOR ADC0848 SETTLING
+00B5 742E            330                             MOV A,#2EH
+00B7 120137          331                             LCALL DISPLAY                           ;DOT 3
+00BA 121213          332                             LCALL DELAYS
+00BD 120137          333                             LCALL DISPLAY                           ;DOT 4
+00C0 121213          334                             LCALL DELAYS
+                     335     
+                     336                             
+                     337                             
+00C3 120157          338                             LCALL CLEARH                            ;CLEAR THE LCD AND HOME CUR
+                             SOR
+                     339     
+                     340                             
+                     341     
+                     342     ;------------------------------------------------------------------------------------------
+                             --------
+                     343     ;******************************************************************************************
+                             ********
+                     344     ;PROGRAM MAIN
+                     345     ;MAIN BEGINS HERE
+                     346     
+00C6 7402            347     MAIN:           MOV A,#02H                                      ;HOME CURSOR
+00C8 120128          348                             LCALL COMMAND
+                     349                                                              
+                     350     
+00CB 7830            351     LCDWRITEU:      MOV R0,#30H                                     ;UPDATE LCD UPPER LINE
+00CD 7A10            352                             MOV R2,#10H
+00CF E6              353     DISPU:          MOV A,@R0
+00D0 120137          354                             LCALL DISPLAY
+00D3 08              355                             INC R0
+00D4 DAF9            356                             DJNZ R2,DISPU
+                     357     
+                     358     
+00D6 74C0            359     LCDWRITEL:      MOV A,#0C0H                                     ;UPDATE LCD LOWER LINE
+00D8 120128          360                             LCALL COMMAND
+00DB 7A10            361                             MOV R2,#10H
+00DD E6              362     DISPL:          MOV A,@R0
+00DE 120137          363                             LCALL DISPLAY
+00E1 08              364                             INC R0
+00E2 DAF9            365                             DJNZ R2,DISPL
+                     366     
+                     367     
+00E4 E560            368     ASCONV:         MOV A,60H                                       ;CONVERT ALL CHANNEL INPUTS
+                              TO BCD  
+00E6 121251          369                             LCALL CONVERT
+00E9 12126A          370                             LCALL LOADA                                     ;LOAD THEM INTO DIS
+                             PLAY RAM
+00EC E561            371                             MOV A,61H
+00EE 121251          372                             LCALL CONVERT
+00F1 121274          373                             LCALL LOADB
+00F4 E562            374                             MOV A,62H
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE     7
+
+00F6 121251          375                             LCALL CONVERT
+00F9 12127E          376                             LCALL LOADC     
+                     377     
+00FC 208403          378     CHSWA:          JB SWA,CHSWB                            ;POLL SWITCHES
+00FF 121237          379                             LCALL MANSWA
+0102 208303          380     CHSWB:          JB SWB,CHSWC
+0105 121241          381                             LCALL MANSWB
+0108 208203          382     CHSWC:          JB SWC,CHSWD
+010B 121245          383                             LCALL MANSWC
+010E 208103          384     CHSWD:          JB SWD,MOVEON
+0111 121249          385                             LCALL MANSWD
+                     386     
+0114 00              387     MOVEON:         NOP
+                     388                             
+                     389                             
+0115 E566            390                             MOV A,66H                                       ;ADC START FOR THE 
+                             CURRENT PASS
+0117 04              391                             INC A                                           ;66H CONTAINS CURRE
+                             NT CHANNEL ENABLING CODE
+0118 B40B02          392                             CJNE A,#0BH,PROCM                       ;08H,09H,0AH FOR FIRST THRE
+                             E CHANNELS
+011B 7408            393                             MOV A,#08H
+011D 120172          394     PROCM:          LCALL ADWRITE
+0120 F566            395                             MOV 66H,A
+                     396     
+0122 12122D          397                             LCALL DELAYD
+                     398     
+0125 0200C6          399     MAIN_END:       LJMP MAIN                                       ;LOOP THE MAIN
+                     400     
+                     401     ;PROGRAM MAIN ENDS HERE
+                     402     ;******************************************************************************************
+                     403     ;------------------------------------------------------------------------------------------
+                     404     ;LCD ROUTINES
+                     405     
+0128 120146          406     COMMAND:        LCALL READY
+012B C286            407                             CLR RW
+012D C287            408                             CLR RS
+012F F5A0            409                             MOV P2,A
+0131 D285            410                             SETB EN
+0133 00              411                             NOP 
+0134 C285            412                             CLR EN
+0136 22              413                             RET
+                     414     
+0137 120146          415     DISPLAY:        LCALL READY
+013A C286            416                             CLR RW
+013C D287            417                             SETB RS
+013E F5A0            418                             MOV P2,A
+0140 D285            419                             SETB EN
+0142 00              420                             NOP
+0143 C285            421                             CLR EN
+0145 22              422                             RET
+                     423     
+0146 D2A7            424     READY:          SETB P2.7
+0148 C287            425                             CLR RS
+014A D286            426                             SETB RW
+014C C285            427     BUSY:           CLR EN
+014E D285            428                             SETB EN
+0150 20A7F9          429                             JB P2.7,BUSY
+0153 00              430                             NOP
+0154 C285            431                             CLR EN
+0156 22              432                             RET
+                     433     
+0157 7401            434     CLEARH:         MOV A,#01H                                              ;CLEAR DISPLAY AND 
+                             HOME CURSOR
+0159 120128          435                             LCALL COMMAND
+015C 22              436                             RET
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE     8
+
+                     437     
+015D 7414            438     RSHIFTC:        MOV A,#14H                                              ;SHIFT CURSOR RIGHT
+                              BY COUNT IN B
+015F 120128          439     SHRIGHT:        LCALL COMMAND
+0162 D5F0FA          440                             DJNZ B,SHRIGHT
+0165 22              441                             RET
+                     442                             
+0166 E4              443     WRITEALL:       CLR A                                                   ;WRITE ALL POINTED 
+                             BY DPTR
+0167 93              444                             MOVC A,@A+DPTR
+0168 6006            445                             JZ EXITWR
+016A A3              446                             INC DPTR
+016B 120137          447                             LCALL DISPLAY
+016E 80F6            448                             SJMP WRITEALL
+0170 00              449     EXITWR:         NOP
+0171 22              450                             RET
+                     451     
+                     452     ;------------------------------------------------------------------------------------------
+                             -
+                     453     ;ADC0848 SUBROUTINES
+                     454     
+0172 F590            455     ADWRITE:        MOV P1,A
+0174 D2B7            456                             SETB RD
+0176 D2B6            457                             SETB WR                                                 ; SET WR BA
+                             R
+0178 00              458                             NOP
+0179 C2B6            459                             CLR WR                                                  ; CLEAR WR 
+                             BAR
+017B 00              460                             NOP
+017C 00              461                             NOP
+017D 00              462                             NOP
+017E D2B6            463                             SETB WR                                                 ; RISING ED
+                             GE ON WR BAR
+0180 22              464                             RET
+                     465     
+0181 D2B6            466     ADREAD:         SETB WR
+0183 C2B7            467                             CLR RD                                                  ; RD BAR LO
+                             W
+0185 00              468                             NOP
+0186 00              469                             NOP
+0187 7590FF          470                             MOV P1,#0FFH                                    ;CONFIGURE PORT FOR
+                              INPUT::: DONT FORGET THIS                                                   
+018A E590            471                             MOV A,P1
+018C 00              472                             NOP
+018D 22              473                             RET     
+                     474                                                     
+                     475     ;------------------------------------------------------------------------------------------
+                             -
+                     476     ;INTERRUPT SERVICE ROUTINES
+                     477     
+                     478     ;SERIAL INTERRUPT : SERIAL
+                     479     ;SERIAL RECEPTION OR TRANSMISSION COMPLETE
+0023                 480     ORG 0023H
+0023 021000          481                             LJMP 1000H
+1000                 482     ORG 1000H
+                     483     
+1000 C2CA            484     SERCON:         CLR TR2
+1002 309822          485                             JNB RI,TXI
+1005 C298            486                             CLR RI
+1007 E599            487                             MOV A,SBUF
+1009 20200A          488                             JB 20H,SKIPC
+100C B4CF1A          489                             CJNE A,#0CFH,EXITC
+100F 75999F          490                             MOV SBUF,#9FH
+1012 D220            491                             SETB 20H
+1014 8013            492                             SJMP EXITC
+1016 B4BF07          493     SKIPC:          CJNE A,#0BFH,SKIPC2
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE     9
+
+1019 7599BF          494                             MOV SBUF,#0BFH
+101C C220            495                             CLR 20H
+101E 8009            496                             SJMP EXITC
+1020 D221            497     SKIPC2:         SETB 21H
+1022 75999F          498                             MOV SBUF,#9FH
+1025 8002            499                             SJMP EXITC
+1027 C299            500     TXI:            CLR TI
+1029 D2CA            501     EXITC:          SETB TR2
+102B 32              502                             RETI
+                     503     
+                     504     ;EXTERNAL INTERRUPT 0: INT0
+                     505     ;ADC CONVERSION COMPLETE INTERRUPT
+0003                 506     ORG 0003H
+0003 021200          507                             LJMP 1200H
+1200                 508     ORG 1200H
+                     509     
+1200 00              510     ADCSERVE:       NOP
+1201 00              511                             NOP
+1202 D2D3            512                             SETB PSW.3
+1204 120181          513                             LCALL ADREAD
+1207 F6              514                             MOV @R0,A
+1208 B86204          515                             CJNE R0,#62H,PROC
+120B 7860            516                             MOV R0,#60H
+120D 8001            517                             SJMP EXITR
+120F 08              518     PROC:           INC R0
+1210 C2D3            519     EXITR:          CLR PSW.3
+1212 32              520                             RETI
+                     521      
+                     522     ;------------------------------------------------------------------------------------------
+                             -
+                     523     ;OTHER SUBROUTINES
+                     524     
+                     525     ;DELAY INIT
+1213 7F06            526     DELAYS:         MOV R7,#06H
+1215 7EFF            527                             MOV R6,#0FFH
+1217 7DFF            528                             MOV R5,#0FFH
+1219 DDFE            529                             DJNZ R5,$
+121B DEFC            530                             DJNZ R6,$-2
+121D DFFA            531                             DJNZ R7,$-4
+121F 22              532                             RET
+                     533     
+                     534     ;DELAY RESET RECOVERY
+1220 7F10            535     DELAYR:         MOV R7,#10H
+1222 7EFF            536                             MOV R6,#0FFH
+1224 7DFF            537                             MOV R5,#0FFH
+1226 DDFE            538                             DJNZ R5,$
+1228 DEFC            539                             DJNZ R6,$-2
+122A DFFA            540                             DJNZ R7,$-4
+122C 22              541                             RET
+                     542     
+                     543     ;DELAY DISPLAY
+122D 7FFF            544     DELAYD:         MOV R7,#0FFH
+122F DFFE            545                             DJNZ R7,$
+1231 22              546                             RET
+                     547     
+                     548     ;DELAY DEBOUNCE
+1232 7F50            549     DELAYSW:        MOV R7,#50H
+1234 DFFE            550                             DJNZ R7,$
+1236 22              551                             RET
+                     552     
+                     553     ;SWITCH A MANAGER        :: FUNCTION: MICROCOMPUTER 'A' RESET
+1237 12124D          554     MANSWA:         LCALL DEBOUNCE
+123A 208403          555                             JB SWA,FLA
+123D 020000          556                             LJMP RESET
+1240 22              557     FLA:            RET
+                     558     
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE    10
+
+                     559     ;SWITCH B MANAGER               :: FUNCTION:
+1241 12124D          560     MANSWB:         LCALL DEBOUNCE
+1244 22              561     FLB:            RET
+                     562     
+                     563     ;SWITCH C MANAGER               :: FUNCTION:
+1245 12124D          564     MANSWC:         LCALL DEBOUNCE
+1248 22              565     FLC:            RET
+                     566     
+                     567     ;SWITCH D MANAGER               :: FUNCTION
+1249 12124D          568     MANSWD:         LCALL DEBOUNCE
+124C 22              569     FLD:            RET
+                     570     
+                     571     ;SWITCH DEBOUNCER
+124D 121232          572     DEBOUNCE:       LCALL DELAYSW
+1250 22              573                             RET
+                     574                             
+                     575     ;HEX TO ASCII CONVERTER
+1251 75F064          576     CONVERT:        MOV B,#100
+1254 84              577                             DIV AB
+1255 4430            578                             ORL A,#30H
+1257 F563            579                             MOV 63H,A
+1259 E5F0            580                             MOV A,B
+125B 75F00A          581                             MOV B,#10
+125E 84              582                             DIV AB
+125F 4430            583                             ORL A,#30H
+1261 F564            584                             MOV 64H,A
+1263 E5F0            585                             MOV A,B
+1265 4430            586                             ORL A,#30H
+1267 F565            587                             MOV 65H,A
+1269 22              588                             RET
+                     589                              
+                     590     ;LOAD THE TEMPORARY ASCII TO DISPLAY RAM
+126A 856331          591     LOADA:          MOV 31H,63H
+126D 856432          592                             MOV 32H,64H
+1270 856533          593                             MOV 33H,65H
+1273 22              594                             RET
+                     595     
+1274 856337          596     LOADB:          MOV 37H,63H
+1277 856438          597                             MOV 38H,64H
+127A 856539          598                             MOV 39H,65H
+127D 22              599                             RET
+                     600     
+127E 85633D          601     LOADC:          MOV 3DH,63H
+1281 85643E          602                             MOV 3EH,64H
+1284 85653F          603                             MOV 3FH,65H
+1287 22              604                             RET
+                     605     ;------------------------------------------------------------------------------------------
+                             -
+                     606     ;DISPLAY DATA
+                     607     
+1F00                 608     ORG 1F00H
+                     609     
+1F00 494E4954        610     MSG1:   DB 'INITIALIZING',00H
+1F04 49414C49                
+1F08 5A494E47                
+1F0C 00                      
+1F0D 41303030        611     MSG2:   DB 'A000  B000  C000SWIN A0 B0 C0 D0',00H
+1F11 20204230                
+1F15 30302020                
+1F19 43303030                
+1F1D 5357494E                
+1F21 20413020                
+1F25 42302043                
+1F29 30204430                
+1F2D 00                      
+                     612     ;------------------------------------------------------------------------------------------
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE    11
+
+                             - 
+                     613     ;------------------------------------------------------------------------------------------
+                             -
+                     614     END
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE    12
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+AC . . . . . . . .  B ADDR   00D0H.6 A   
+ACC. . . . . . . .  D ADDR   00E0H   A   
+ADCINIT. . . . . .  C ADDR   00ABH   A   
+ADCSERVE . . . . .  C ADDR   1200H   A   
+ADREAD . . . . . .  C ADDR   0181H   A   
+ADWRITE. . . . . .  C ADDR   0172H   A   
+ASCONV . . . . . .  C ADDR   00E4H   A   
+B. . . . . . . . .  D ADDR   00F0H   A   
+BUSY . . . . . . .  C ADDR   014CH   A   
+CHSWA. . . . . . .  C ADDR   00FCH   A   
+CHSWB. . . . . . .  C ADDR   0102H   A   
+CHSWC. . . . . . .  C ADDR   0108H   A   
+CHSWD. . . . . . .  C ADDR   010EH   A   
+CLE. . . . . . . .  C ADDR   006CH   A   
+CLEARH . . . . . .  C ADDR   0157H   A   
+COMMAND. . . . . .  C ADDR   0128H   A   
+CONVERT. . . . . .  C ADDR   1251H   A   
+CP_RL2 . . . . . .  B ADDR   00C8H.0 A   
+CY . . . . . . . .  B ADDR   00D0H.7 A   
+C_T2 . . . . . . .  B ADDR   00C8H.1 A   
+DEBOUNCE . . . . .  C ADDR   124DH   A   
+DELAYD . . . . . .  C ADDR   122DH   A   
+DELAYR . . . . . .  C ADDR   1220H   A   
+DELAYS . . . . . .  C ADDR   1213H   A   
+DELAYSW. . . . . .  C ADDR   1232H   A   
+DISPD. . . . . . .  C ADDR   0090H   A   
+DISPL. . . . . . .  C ADDR   00DDH   A   
+DISPLAY. . . . . .  C ADDR   0137H   A   
+DISPU. . . . . . .  C ADDR   00CFH   A   
+DPH. . . . . . . .  D ADDR   0083H   A   
+DPL. . . . . . . .  D ADDR   0082H   A   
+EA . . . . . . . .  B ADDR   00A8H.7 A   
+EN . . . . . . . .  B ADDR   0080H.5 A   
+ES . . . . . . . .  B ADDR   00A8H.4 A   
+ET0. . . . . . . .  B ADDR   00A8H.1 A   
+ET1. . . . . . . .  B ADDR   00A8H.3 A   
+ET2. . . . . . . .  B ADDR   00A8H.5 A   
+EX0. . . . . . . .  B ADDR   00A8H.0 A   
+EX1. . . . . . . .  B ADDR   00A8H.2 A   
+EXEN2. . . . . . .  B ADDR   00C8H.3 A   
+EXF2 . . . . . . .  B ADDR   00C8H.6 A   
+EXITC. . . . . . .  C ADDR   1029H   A   
+EXITDD . . . . . .  C ADDR   0099H   A   
+EXITR. . . . . . .  C ADDR   1210H   A   
+EXITWR . . . . . .  C ADDR   0170H   A   
+F0 . . . . . . . .  B ADDR   00D0H.5 A   
+F1 . . . . . . . .  B ADDR   00D0H.1 A   
+FLA. . . . . . . .  C ADDR   1240H   A   
+FLB. . . . . . . .  C ADDR   1244H   A   
+FLC. . . . . . . .  C ADDR   1248H   A   
+FLD. . . . . . . .  C ADDR   124CH   A   
+IE . . . . . . . .  D ADDR   00A8H   A   
+IE0. . . . . . . .  B ADDR   0088H.1 A   
+IE1. . . . . . . .  B ADDR   0088H.3 A   
+INIT . . . . . . .  C ADDR   0034H   A   
+INT0 . . . . . . .  B ADDR   00B0H.2 A   
+INT1 . . . . . . .  B ADDR   00B0H.3 A   
+INTR . . . . . . .  B ADDR   00B0H.2 A   
+IP . . . . . . . .  D ADDR   00B8H   A   
+IT0. . . . . . . .  B ADDR   0088H.0 A   
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE    13
+
+IT1. . . . . . . .  B ADDR   0088H.2 A   
+LCDWRITEL. . . . .  C ADDR   00D6H   A   
+LCDWRITEU. . . . .  C ADDR   00CBH   A   
+LOADA. . . . . . .  C ADDR   126AH   A   
+LOADB. . . . . . .  C ADDR   1274H   A   
+LOADC. . . . . . .  C ADDR   127EH   A   
+MAIN . . . . . . .  C ADDR   00C6H   A   
+MAIN_END . . . . .  C ADDR   0125H   A   
+MANSWA . . . . . .  C ADDR   1237H   A   
+MANSWB . . . . . .  C ADDR   1241H   A   
+MANSWC . . . . . .  C ADDR   1245H   A   
+MANSWD . . . . . .  C ADDR   1249H   A   
+MOVEON . . . . . .  C ADDR   0114H   A   
+MSG1 . . . . . . .  C ADDR   1F00H   A   
+MSG2 . . . . . . .  C ADDR   1F0DH   A   
+OV . . . . . . . .  B ADDR   00D0H.2 A   
+P. . . . . . . . .  B ADDR   00D0H.0 A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P0_0 . . . . . . .  B ADDR   0080H.0 A   
+P0_1 . . . . . . .  B ADDR   0080H.1 A   
+P0_2 . . . . . . .  B ADDR   0080H.2 A   
+P0_3 . . . . . . .  B ADDR   0080H.3 A   
+P0_4 . . . . . . .  B ADDR   0080H.4 A   
+P0_5 . . . . . . .  B ADDR   0080H.5 A   
+P0_6 . . . . . . .  B ADDR   0080H.6 A   
+P0_7 . . . . . . .  B ADDR   0080H.7 A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P1_0 . . . . . . .  B ADDR   0090H.0 A   
+P1_1 . . . . . . .  B ADDR   0090H.1 A   
+P1_2 . . . . . . .  B ADDR   0090H.2 A   
+P1_3 . . . . . . .  B ADDR   0090H.3 A   
+P1_4 . . . . . . .  B ADDR   0090H.4 A   
+P1_5 . . . . . . .  B ADDR   0090H.5 A   
+P1_6 . . . . . . .  B ADDR   0090H.6 A   
+P1_7 . . . . . . .  B ADDR   0090H.7 A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P2_0 . . . . . . .  B ADDR   00A0H.0 A   
+P2_1 . . . . . . .  B ADDR   00A0H.1 A   
+P2_2 . . . . . . .  B ADDR   00A0H.2 A   
+P2_3 . . . . . . .  B ADDR   00A0H.3 A   
+P2_4 . . . . . . .  B ADDR   00A0H.4 A   
+P2_5 . . . . . . .  B ADDR   00A0H.5 A   
+P2_6 . . . . . . .  B ADDR   00A0H.6 A   
+P2_7 . . . . . . .  B ADDR   00A0H.7 A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+P3_0 . . . . . . .  B ADDR   00B0H.0 A   
+P3_1 . . . . . . .  B ADDR   00B0H.1 A   
+P3_2 . . . . . . .  B ADDR   00B0H.2 A   
+P3_3 . . . . . . .  B ADDR   00B0H.3 A   
+P3_4 . . . . . . .  B ADDR   00B0H.4 A   
+P3_5 . . . . . . .  B ADDR   00B0H.5 A   
+P3_6 . . . . . . .  B ADDR   00B0H.6 A   
+P3_7 . . . . . . .  B ADDR   00B0H.7 A   
+PCON . . . . . . .  D ADDR   0087H   A   
+PROC . . . . . . .  C ADDR   120FH   A   
+PROCM. . . . . . .  C ADDR   011DH   A   
+PS . . . . . . . .  B ADDR   00B8H.4 A   
+PSW. . . . . . . .  D ADDR   00D0H   A   
+PT0. . . . . . . .  B ADDR   00B8H.1 A   
+PT1. . . . . . . .  B ADDR   00B8H.3 A   
+PT2. . . . . . . .  B ADDR   00B8H.5 A   
+PX0. . . . . . . .  B ADDR   00B8H.0 A   
+PX1. . . . . . . .  B ADDR   00B8H.2 A   
+RB8. . . . . . . .  B ADDR   0098H.2 A   
+RCAP2H . . . . . .  D ADDR   00CBH   A   
+RCAP2L . . . . . .  D ADDR   00CAH   A   
+A51 MACRO ASSEMBLER  ACOMP_REV3                                                           04/17/2009 13:24:36 PAGE    14
+
+RCLK . . . . . . .  B ADDR   00C8H.5 A   
+RD . . . . . . . .  B ADDR   00B0H.7 A   
+READY. . . . . . .  C ADDR   0146H   A   
+REN. . . . . . . .  B ADDR   0098H.4 A   
+RESET. . . . . . .  C ADDR   0000H   A   
+RI . . . . . . . .  B ADDR   0098H.0 A   
+RS . . . . . . . .  B ADDR   0080H.7 A   
+RS0. . . . . . . .  B ADDR   00D0H.3 A   
+RS1. . . . . . . .  B ADDR   00D0H.4 A   
+RSHIFTC. . . . . .  C ADDR   015DH   A   
+RW . . . . . . . .  B ADDR   0080H.6 A   
+RXD. . . . . . . .  B ADDR   00B0H.0 A   
+SBUF . . . . . . .  D ADDR   0099H   A   
+SCON . . . . . . .  D ADDR   0098H   A   
+SERCON . . . . . .  C ADDR   1000H   A   
+SHRIGHT. . . . . .  C ADDR   015FH   A   
+SKIPC. . . . . . .  C ADDR   1016H   A   
+SKIPC2 . . . . . .  C ADDR   1020H   A   
+SM0. . . . . . . .  B ADDR   0098H.7 A   
+SM1. . . . . . . .  B ADDR   0098H.6 A   
+SM2. . . . . . . .  B ADDR   0098H.5 A   
+SP . . . . . . . .  D ADDR   0081H   A   
+START. . . . . . .  C ADDR   0030H   A   
+SWA. . . . . . . .  B ADDR   0080H.4 A   
+SWB. . . . . . . .  B ADDR   0080H.3 A   
+SWC. . . . . . . .  B ADDR   0080H.2 A   
+SWD. . . . . . . .  B ADDR   0080H.1 A   
+T0 . . . . . . . .  B ADDR   00B0H.4 A   
+T1 . . . . . . . .  B ADDR   00B0H.5 A   
+T2 . . . . . . . .  B ADDR   0090H.0 A   
+T2CON. . . . . . .  D ADDR   00C8H   A   
+T2EX . . . . . . .  B ADDR   0090H.1 A   
+T2MOD. . . . . . .  D ADDR   00C9H   A   
+TB8. . . . . . . .  B ADDR   0098H.3 A   
+TCLK . . . . . . .  B ADDR   00C8H.4 A   
+TCON . . . . . . .  D ADDR   0088H   A   
+TF0. . . . . . . .  B ADDR   0088H.5 A   
+TF1. . . . . . . .  B ADDR   0088H.7 A   
+TF2. . . . . . . .  B ADDR   00C8H.7 A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TH1. . . . . . . .  D ADDR   008DH   A   
+TH2. . . . . . . .  D ADDR   00CDH   A   
+TI . . . . . . . .  B ADDR   0098H.1 A   
+TL0. . . . . . . .  D ADDR   008AH   A   
+TL1. . . . . . . .  D ADDR   008BH   A   
+TL2. . . . . . . .  D ADDR   00CCH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+TR1. . . . . . . .  B ADDR   0088H.6 A   
+TR2. . . . . . . .  B ADDR   00C8H.2 A   
+TXD. . . . . . . .  B ADDR   00B0H.1 A   
+TXI. . . . . . . .  C ADDR   1027H   A   
+WR . . . . . . . .  B ADDR   00B0H.6 A   
+WRITEALL . . . . .  C ADDR   0166H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
