@@ -1,4 +1,0 @@
-"CompC.obj" 
-TO "ConC" 
-RAMSIZE(256) 
-CODE( 0X0000-0X1FFF )
