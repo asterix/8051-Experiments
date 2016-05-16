@@ -1,0 +1,513 @@
+
+                           *********************
+                           *                   *
+                           *   A S E M - 5 1   *
+                           *                   *
+                           *********************
+
+
+                         R E L E A S E - N O T E S
+                         =========================
+
+                             December 31, 2002
+
+
+
+                Copyright (c) 1994, 1996, 2002 by W.W. Heinz
+
+                            All rights reserved.
+
+
+
+
+Version 1.3, Dec 31, 2002:
+==========================
+The following changes have been made to the ASEM-51 package, since
+version 1.3b3 (V1.3 Beta 3):
+
+
+I. Bug Fixes
+------------
+ASEM V1.3b3 flagged the following instructions
+
+        ADD A, direct
+        ADDC A, direct
+        SUBB A, direct
+        ANL A, direct
+        ORL A, direct
+        XRL A, direct
+        MOV A, direct
+        XCH A, direct
+
+with the error message @@@@@ illegal operand @@@@@, if the direct
+expression started with a '('. The bug is fixed in ASEM V1.3.
+
+When asem 1.3b3 tried to write to a busy character device under
+Linux, it aborted with an unspecific error message, e.g.
+
+  @@@@@ fatal I/O error 16: /dev/lp0 @@@@@
+
+This is fixed in V1.3. The new runtime error message is looking like
+
+  @@@@@ device or resource busy: /dev/lp0 @@@@@
+
+
+II. Support of 8051 Derivatives
+-------------------------------
+With this version, new and updated processor definition files are provided:
+
+        File   Status   Manufacturer   Derivatives covered
+----------------------------------------------------------------------------
+    C505.MCU   n        Infineon       C505-2R, C505-L
+   C505C.MCU   n        Infineon       C505C-2R, C505C-L
+   C505A.MCU   n        Infineon       C505A-4E, C505A-L
+  C505CA.MCU   n        Infineon       C505CA-4E, C505CA-L
+   C505L.MCU   n        Infineon       C505L
+    C508.MCU   n        Infineon       C508-4R, C508-4E
+    C868.MCU   n        Infineon       C868-1R, C868-1S
+ 80C32X2.MCU   n        Philips        80C31X2, 80C32X2,
+                                       80C51X2, 80C52X2, 80C54X2, 80C58X2,
+                                       87C51X2, 87C52X2, 87C54X2, 87C58X2,
+                                       89C51X2, 89C52X2, 89C54X2, 89C58X2
+----------------------------------------------------------------------------
+               Status: n=new, r=renamed, m=modified, c=commented
+
+Credits:  Michael R. has sent me 80C32X2.MCU.
+
+
+
+Version 1.3b3, June 25, 2002:
+=============================
+These are the longest release notes I have ever written for an ASEM-51
+version. It seems that I had always some spare time to support, maintain,
+change, extend, improve and port it over and over for many years, but
+never to publish an official new release.
+The release notes would become even more lengthy (and boring), if I only
+tried to explain the reasons I still remember. Let's say, ASEM-51 and its
+author simply are victims of circumstances!  :-)
+
+
+I. New Features
+---------------
+Version 1.3 is a release of extensions indeed!
+That's why the new features are discussed first.
+
+
+I.1 Host Platforms
+------------------
+Version 1.3 is the first ASEM-51 release which is available for multiple
+host platforms. There are executables for MS-DOS, Win32 and Linux.
+ASEM-51 V1.3 is distributed in two separate packages: one containing all
+the DOS/Windows stuff, and a second containing the Linux implementation.
+
+MS-DOS and Windows:
+Besides the proven real-mode assembler ASEM.EXE, version 1.3 contains the
+new protected-mode assembler ASEMX.EXE! ASEMX is functionally identical
+to ASEM, but it can use up to 64 MB of XMS memory to assemble even huge
+programs. ASEMX is accompanied by Borland's DPMI server DPMI16BI.OVL and
+runtime manager RTM.EXE. It requires a 286 CPU (or better), and at least
+512 kB of free XMS memory (1 MB recommended)!
+For Windows 9x/NT systems, the new Win32 console-mode assembler ASEMW.EXE
+is provided. ASEMW is functionally identical to ASEM, but it can handle long
+file names and benefits of the Win32 memory management. ASEMW is accompanied
+by a corresponding Win32 binary-to-hex converter HEXBINW.EXE.
+
+Linux:
+For 386-based Linux systems, the native ELF executables asem, hexbin,
+customiz, and reset51 are provided. These programs are Linux ports of the
+corresponding MS-DOS versions. Especially asem, hexbin, and reset51 had to
+be adapted to the Linux environment and its conventions.
+The rest of the ASEM-51 distribution has been made Linux-ready as good as
+possible. The Linux distribution is available in tar and rpm format.
+
+
+I.2 Assembler
+-------------
+With only five new keywords (MACRO, REPT, ENDM, EXITM, LOCAL) and some
+additional control characters, ASEM-51 version 1.3 introduces a full-blown
+macro processing! It is possible to define named and repeated macro blocks.
+Substitution of formal parameters is implemented as well as local symbols.
+Macro calls and definitions can be nested to any depth.
+Conditional assembly has been extended with the new IFN, IFB, IFNB, ELSEIF,
+ELSEIFN, ELSEIFDEF, ELSEIFNDEF, ELSEIFB, and ELSEIFNB meta instructions.
+The new control statements $GEN, $NOGEN, $GENONLY, $COND, $NOCOND, $CONDONLY,
+$SAVE, and $RESTORE allow refined listing options for macro expansion and
+conditional assembly. $MACRO and $NOMACRO allow or suppress macro expansion.
+
+The /OMF-51 command line option has been introduced for the DOS and Windows
+implementations, to generate absolute OMF-51 modules instead of Intel-HEX
+files. The Linux implementation recognizes the --omf-51 (or -o) option
+respectively. It is also possible to include debug information with the
+$DEBUG assembler control.
+
+The environment variable ASEM51INC has been introduced on all platforms, to
+specify a search path for include files.
+
+The new $NOBUILTIN control suppresses predefined symbols (SFR) in the symbol
+table or cross-reference listing, while user-defined symbols are still listed.
+
+The new $ERROR and $WARNING controls allow a more secure configuration
+management of application programs.
+
+For identification of the assembler and its version number, the following
+predefined symbols of the type NUMBER have been introduced:
+
+        ??ASEM_51  =  8051H         ASEM-51
+        ??VERSION  =  0130H         version 1.3
+
+To improve compatibility with the Intel assembler, more than one assembler
+control is allowed in a control line now, e.g.:
+
+$ NOMOD51 INCLUDE(80C517.MCU)
+
+Include files may now be nested to any depth!
+
+EQU and SET can now be used, to define symbols not only for numerical
+constants, but also for registers A and R0 thru R7.
+
+
+I.3 MS-DOS Implementation
+-------------------------
+A batch file INSTALL.BAT has been provided, to install or update the
+ASEM-51 package under MS-DOS or Windows.
+The batch file KILLASEM.BAT deletes an existing ASEM-51 installation.
+
+Due to a new parser concept and assembly language optimizations in lexical
+analysis and symbol table, ASEM.EXE is now running up to 20% faster.
+
+ASEM and HEXBIN can now also read ASCII files in UNIX format!
+
+The obsolete field separator '=' for ASEM and HEXBIN command line options
+is no longer accepted under MS-DOS. From version 1.3 only ':' is allowed.
+
+The former RESET program has been renamed to RESET51, due to name conflicts.
+It can now also form a reset pulse by dropping the DTR signal of a serial
+port. BOOT51.DOC has been updated accordingly.
+
+
+I.4 Support of 8051 Derivatives
+-------------------------------
+With this version, new and updated processor definition files are provided:
+
+        File   Status   Manufacturer   Derivatives covered
+----------------------------------------------------------------------------
+  80C310.MCU   n        Dallas         DS80C310
+  80C390.MCU   n        Dallas         DS80C390
+  87C520.MCU   n        Dallas         DS87C520, DS83C520
+  87C530.MCU   n        Dallas         DS87C530, DS83C530
+  87C550.MCU   n        Dallas         DS87C550
+  89C420.MCU   n        Dallas         DS89C420
+  DS5000.MCU   n        Dallas         DS5000FP, DS5000, DS5000T,
+                                       DS2250, DS2250T
+  DS5001.MCU   n        Dallas         DS5001FP, DS5002FP, DS5002FPM,
+                                       DS2251T, DS2252T
+ MAX7651.MCU   n        Maxim          MAX7651, MAX7652
+   89C52.MCU   n        Atmel          AT89C52, AT89C55, AT89LV52, AT89LV55,
+                                       AT87LV52, AT80F52, AT87F52
+ 89C1051.MCU   n        Atmel          AT89C1051
+ 89C2051.MCU   r        Atmel          AT89C2051, AT89C4051, AT89C1051U
+ 89S8252.MCU   n        Atmel          AT89S8252, AT89LS8252
+   89S51.MCU   n        Atmel          AT89S51
+   89S52.MCU   n        Atmel          AT89S52, AT89LS52
+   89S53.MCU   n        Atmel          AT89S53, AT89LS53
+ 89S4D12.MCU   n        Atmel          AT89S4D12
+ 87F51RC.MCU   n        Atmel          AT87F51RC, AT87F55, AT87LV55
+  83C51R.MCU   n        Intel          83C51RA, 80C51RA, 87C51RA,
+                                       83C51RB, 87C51RB, 83C51RC, 87C51RC
+ 83C51FX.MCU   r,m,c    Intel          83C51FA, 80C51FA, 87C51FA,
+                                       83C51FB, 87C51FB, 83C51FC, 87C51FC
+ 83C51KB.MCU   n        Intel          83C51KB
+ 83C51GB.MCU   n        Intel          83C51GB, 80C51GB, 87C51GB
+  83C151.MCU   n        Intel          83C151SB, 87C151SB, 80C151SB
+                                       83C151SA, 87C151SA
+ 83931HA.MCU   n        Intel          83931HA, 80931HA
+ 83931AA.MCU   n        Intel          83931AA, 80931AA
+  83C750.MCU   m        Philips        83C750, 87C750
+  83C754.MCU   n        Philips        83C754, 87C754
+87LPC762.MCU   n        Philips        87LPC762
+87LPC768.MCU   n        Philips        87LPC768
+ 83C515A.MCU   m        SIEMENS        83C515A-5, 80C515A
+    C504.MCU   n,c      SIEMENS        C504-2R, C504-L
+    C509.MCU   n,c      SIEMENS        C509-L
+  C513AO.MCU   n        SIEMENS        C513AO
+    C515.MCU   n        SIEMENS        C515-L, C515-1R
+   C515A.MCU   n        SIEMENS        C515A-L, C515A-4R
+   C515C.MCU   n,c      SIEMENS        C515C-8R
+   C517A.MCU   r,m      SIEMENS        C517A-L, C517A-4R, 83C517A-5, 80C517A
+   C540U.MCU   n        SIEMENS        C540U
+   C541U.MCU   n        SIEMENS        C541U
+ 83C154S.MCU   n        OKI            83C154S, 80C154S, 85C154HVS
+ 73M2910.MCU   n        TDK            73M2910, 73M2910A
+  AN2131.MCU   n        Cypress        AN2121, AN2122, AN2125, AN2126,
+                                       AN2131, AN2135, AN2136
+----------------------------------------------------------------------------
+               Status: n=new, r=renamed, m=modified, c=commented
+
+File 83C51F.MCU has been renamed to 83C51FX.MCU and completed with the
+"mysterious IPH register" and related commentary.
+The SFR symbol definitions in file 83C750.MCU have been changed according
+to manufacturer specifications.
+The BIT symbols for P1.0 thru P1.3 in file 83C515A.MCU have been changed
+according to their equivalents in the new file C515C.MCU.
+File C517A.MCU replaces 83C517A.MCU, because the C517A is functionally
+identical (with some slight differences in naming conventions only).
+Note that all SIEMENS derivatives are now manufactured and sold by Infineon!
+
+Credits:
+Axel Kielhorn has written the file DS5000.MCU.
+Anders Sandstroem has sent me 87LPC762.MCU and 87LPC768.MCU.
+
+
+I.5 Documentation
+-----------------
+The whole documentation is now available in both ASCII and HTML format!
+(To read the HTML manuals, start with file DOCS.HTM.)
+The previous "ASEM-51 Updating Guide" UPDATES.DOC has been replaced by
+the document SUPPORT.DOC with the title "ASEM-51 Support".
+Of course the whole ASEM-51 documentation has been updated to describe
+all new features.
+
+
+II. Bug Fixes
+-------------
+An attempt to redefine a predefined (SFR) symbol with the /DEFINE command
+line option was sometimes sufficient to totally confuse ASEM V1.2!
+In these cases, version 1.3 now aborts with a proper runtime error message.
+
+ASEM V1.2 didn't notice, if number type operands of control statements
+were not enclosed in parentheses. This has been fixed with version 1.3!
+
+If the location counter symbol $ appeared as the first operand of an
+instruction starting in column 1, ASEM V1.2 has flagged it with the
+error message
+
+   25:    0007  80 00           SJMP $
+                                     ^
+                          @@@@@ illegal control statement @@@@@
+
+This has been fixed with version 1.3!
+
+ASEM V1.3 does no longer accept the following constructions:
+
+- The start of absolute BIT or DATA segments with BSEG or DSEG
+  at base addresses above 7FH.
+- Memory reservation statements in BIT or DATA segments with
+  DBIT or DS at locations above 7FH.
+- Setting the location counter in BIT or DATA segments with
+  ORG to locations above 7FH.
+- Setting the location counter with ORG to locations below
+  the segment base address. (Applies to all segments!)
+
+If the first operand of the following instructions
+
+        ANL direct, #const8
+        ORL direct, #const8
+        XRL direct, #const8
+        MOV direct, #const8
+        MOV direct, direct
+        DB  const8, const8
+        DW  const16, const16
+
+contained forward references on pass 1, and was flagged with one of the
+following error messages
+
+        @@@@@ segment type mismatch @@@@@
+        @@@@@ attempt to divide by zero @@@@@
+        @@@@@ invalid bit number @@@@@
+        @@@@@ invalid base address @@@@@
+        @@@@@ expression out of range @@@@@
+
+on pass 2, ASEM V1.2 calculated the code lengths of these instructions
+different on pass 1 and pass 2, causing a
+
+        @@@@@ phase error @@@@@
+
+for all subsequent label definitions in the same CODE segment.
+This has been fixed with version 1.3!
+
+If a frequently used special character like # or @ is read in a position
+where an expression is expected, ASEM V1.3 does no longer flag it with
+the confusing error message "unary operator expected", but with "illegal
+operand".
+
+If ASEM.EXE V1.2 had aborted with a runtime error on pass 1, the previous
+HEX and list files were left unchanged, because the old output files were
+first overwritten between pass 1 and pass 2. In some cases this was very
+confusing for the users (and for batch files as well).
+Provided the command line parameters are correct, the old output files are
+now overwritten by version 1.3 prior to pass 1.
+
+The processor definition file 89C1051.MCU, provided with version 1.2,
+was containing the definitions for the AT89C2051 rather than for the
+AT89C1051! Since the two parts are not register-compatible, 89C1051.MCU
+has been renamed to 89C2051.MCU, and 89C1051.MCU has been rewritten.
+
+Sometimes BOOT-51 V1.0 lost characters, if the "GO TO" command was sent
+in batch mode with baudrates greater than 9600 Baud. This has been fixed
+with version 1.1.
+BOOT-51 V1.1 is now accepting Intel-HEX file uploads with CR, LF, or
+CR/LF at the end of line.
+BOOT51.DOC has been updated accordingly.
+
+Due to a limitation of the Turbo-Pascal 7.01 runtime system, the program
+RESET.EXE crashed with "Runtime error 200" on 200 MHz (and faster) Pentium
+systems! This has been fixed with release 1.3.
+Note: The program has been renamed to RESET51.EXE, to avoid name conflicts.
+
+When assembling short programs on fast computers and uploading them
+to the MCS-51 target board at low baudrates with BOOT.BAT, it could
+happen that the upload of the HEX file started before BOOT-51 had
+fully recovered from (an automatic) reset. Since BOOT-51 needs some
+time to output its sign-on message and prompt, it sometimes missed
+the upload command, because ASEM.EXE had finished too fast!    :-)
+To fix this, a small delay program SLEEP.EXE is provided,
+which is always invoked after RESET51.EXE. (see UPLOAD.BAT)
+
+
+
+Version 1.2, Jan 22, 1996:
+==========================
+
+1. Bug Fixes:
+-------------
+Since version 1.0, only two serious bugs have been found in ASEM-51:
+
+If DB or DW statements contained at least two subsequent expressions with
+forward references, followed by at least one further expression or string,
+the code lengths of these statements were calculated different on pass 1
+and pass 2. Therefore, jumps to locations behind those statements might
+have led to wrong addresses.
+
+If a symbol name with more than 31 characters was referenced in an
+instruction operand, the assembler marked that symbol reference with the
+error message "@@@@@ symbol not defined @@@@@", although it was defined
+correctly above.
+
+Apart of that, some minor deficiencies have been improved or corrected:
+
+The arrows of the error messages in the list file are now pointing more
+exactly to the position in the source line, where something is wrong.
+
+ASEM and HEXBIN do no longer crash in exotic I/O error situations
+(i.e. opening the door of a disk drive while reading from it),
+and they can output more specific I/O error messages.
+
+It is no longer possible, to overwrite the input files by specifying
+duplicate file names in the command line.
+(This does not apply to device names!)
+
+The previous field separator '=' for ASEM and HEXBIN command line options
+had to be changed to ':', because of two reasons:
+It is not possible, to pass a string, containing an '=' character, to a DOS
+batch file as a parameter, and it cannot be assigned to a DOS environment
+variable.
+However, the old field separator '=' is still accepted to maintain
+compatibility with previous HEXBIN versions.
+
+
+2. New Features:
+----------------
+The new assembler version comes up with numerous extensions and improvements:
+
+The /INCLUDES command line option has been introduced, to specify
+directories that ASEM has to search for include files.
+The /DEFINE command line option has been implemented, to define symbols
+from the command line, for easy assembly of different program variants.
+Conditional assembly has been extended with the new IFDEF and IFNDEF
+meta instructions.
+Primary controls may now be preceded also by general controls.
+The new $PHILIPS control allows to switch to the reduced instruction set
+of the Philips 83C75x family of microcontrollers.
+The pseudo instruction NAME has been introduced for compatibility purposes.
+The ASEM-51 list file has been beautified, and contains more information.
+New fancy printing facilities have been introduced with the $XREF,
+$PAGEWIDTH, $DATE, $TITLE and $NOTABS controls.
+The $DEBUG, $NODEBUG, $MOD51, $PAGING, $SYMBOLS, and $NOXREF controls
+have been implemented for compatibility purposes.
+Now all assembler controls may be replaced by their (Intel-) abbreviations.
+
+The error message filter program ASEM2MSG has been introduced, which
+allows the integration of ASEM-51 into the Borland IDE for DOS.
+Files ASEM.PIF and ASEM.ICO have been added to simplify the ASEM-51
+installation under Windows 3.1.
+
+Device names that are passed to ASEM or HEXBIN as command line parameters
+may but need no longer be terminated with a ':' character.
+
+HEXBIN 2.2 is running about 15% faster than version 2.1. The length of
+the binary output file now matches exactly the byte count of the code.
+HEXBIN now returns ERRORLEVEL 1 on conversion errors and ERRORLEVEL 2
+on fatal runtime errors.
+
+With this version, new processor definition files are provided:
+
+          File       Manufacturer    Derivatives
+  -------------------------------------------------------------------------
+   89C1051.MCU       Atmel           89C1051, 89C2051
+    83C451.MCU       Philips         83C451, 80C451, 87C451
+    83C528.MCU       Philips         83C528, 80C528, 87C528, 83C524, 87C524
+                                     83CE528, 80CE528, 89CE528
+    83C550.MCU       Philips         83C550, 80C550, 87C550
+    83C562.MCU       Philips         83C562, 80C562
+    83C652.MCU       Philips         83C652, 80C652, 87C652,
+                                     83C654, 87C654, 83CE654, 80CE654
+    83C750.MCU       Philips         83C750, 87C750
+    83C751.MCU       Philips         83C751, 87C751
+    83C752.MCU       Philips         83C752, 87C752
+    83C851.MCU       Philips         83C851, 80C851
+    83C852.MCU       Philips         83C852
+      C501.MCU       SIEMENS         C501-1R, C501-L
+      C502.MCU       SIEMENS         C502-2R, C502-L
+      C503.MCU       SIEMENS         C503-1R, C503-L
+      C511.MCU       SIEMENS         C511, C511A
+      C513.MCU       SIEMENS         C513, C513A, C513A-H
+  COM20051.MCU       SMC             COM20051
+
+ASEM_51.DOC has been updated accordingly, and extended with an alphabetical
+8051 instruction table. The error messages in appendices A and B are now
+sorted in lexical order, and completed with brief explanations.
+
+The bootstrap program BOOT-51 V1.0 has been added to the ASEM-51 package.
+It allows an 8051 target system to receive an application program in
+Intel-Hex format over the serial interface, load it into the external RAM,
+and finally start it (provided that the board has a suitable memory map).
+Once installed, BOOT-51 leads to very short turn-around cycles in testing.
+For detailed information refer to the ASCII text file BOOT51.DOC provided.
+
+An "ASEM-51 Updating Guide" has been added to the package.
+It describes, how and where to get a new ASEM-51 version!
+For further information see the ASCII file UPDATES.DOC provided.
+
+
+
+Version 1.1, Oct 14, 1994:
+==========================
+Due to the zero feedback of the users (if any), bugs have neither been fixed
+nor found. However, there are some improvements all over the ASEM-51 package:
+
+Many ASEM data structures have been revised.
+In version 1.0 the assembler symbol table was implemented as an ordinary
+binary tree. With version 1.1 this has been replaced by an AVL tree that
+is kept balanced all the time, without loss of speed. Furthermore the
+memory consumption of the symbol table could be reduced by up to 25%.
+
+HEXBIN has been optimized.
+HEXBIN 2.1 now is running almost with twice the speed of version 2.0.
+
+New stars are born!
+That's why new processor definition files have been added to the
+ASEM-51 package:
+
+  -  80C320.MCU       DALLAS 25 MHz high-speed micro DS 80C320
+  -  83C515A.MCU      enhanced SIEMENS microcontroller SAB 80C515A/83C515A-5
+  -  83C517A.MCU      enhanced SIEMENS microcontroller SAB 80C517A/83C517A-5
+
+ASEM_51.DOC has been updated accordingly and extended with an 8051
+instruction table.
+
+
+
+Version 1.0, Sep 13, 1994:
+==========================
+In the middle of September 94, we tried to post the first version of ASEM-51
+in the Internet use-group "comp.binaries.ibm.pc".   (Has anybody got it ???)

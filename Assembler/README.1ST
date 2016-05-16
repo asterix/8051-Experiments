@@ -1,0 +1,93 @@
+
+                ASEM-51 Version 1.3 for DOS/Windows
+                ===================================
+
+                   W.W. Heinz,  December 31, 2002
+
+
+1. What exactly is ASEM-51?
+---------------------------
+ASEM-51 is a two-pass macro assembler for the Intel MCS-51 family of
+microcontrollers. It is running on the PC under MS-DOS, Windows, and Linux.
+The ASEM-51 assembly language is a rich subset of the Intel standard that
+guarantees maximum compatibility with existing 8051 assembler sources.
+ASEM-51 can generate two sorts of object files: Intel-HEX format, which is
+directly accepted by most EPROM programmers, and absolute OMF-51 format,
+which is required for many simulators, emulators and target debuggers.
+Thus ASEM-51 is suitable for small and medium MCS-51-based microcontroller
+projects in hobby, education and business.
+For detailed information refer to the documentation provided.
+
+
+2. May I really use ASEM-51?
+----------------------------
+Yes!   :-)
+If you can't believe that, read the ASCII file LICENSE.DOC provided.
+
+
+3. What do I need to get ASEM-51 running?
+-----------------------------------------
+The DOS real-mode assembler ASEM.EXE requires only 256 kB of free DOS memory
+and MS-DOS 3.0 (or higher), and will therefore run on every ancient IBM-PC
+or XT with a 4.77 MHz 8088.   :-)
+The new protected-mode assembler ASEMX.EXE requires a 286 CPU (or better),
+and at least 512 kB of free XMS memory (1 MB recommended).
+The new Win32 console-mode assembler ASEMW.EXE requires a 386 CPU (or better)
+and Windows 95, 98, NT, 2000 or XP.
+ASEM-51 is fast enough even for the slowest DOS and Windows systems possible!
+However, the HTML documentation set requires a 90 MHz Pentium (or better)
+and a web browser.   :-)
+If you have a 16 MHz 386 only, you should better read the ASCII manuals!
+
+
+4. How can I install ASEM-51 on my PC?
+--------------------------------------
+ASEM-51 for DOS/Windows is distributed as a ZIP archive.
+To install it on your system, perform the following steps:
+
+If you are working under Windows, open a DOS-Box.
+Create a new, empty scratch directory on your harddisk.
+
+        MKDIR SCRATCH
+
+Unpack your ASEM-51 distribution archive into this directory,
+preserving the subdirectory structure, e.g.
+
+        PKUNZIP -od ASEM5113.ZIP SCRATCH
+
+Make the scratch directory default.
+
+        CD SCRATCH
+
+Run the batch file INSTALL.BAT provided,
+
+        INSTALL C:\ASEM51
+
+(or something) and follow the instructions.
+
+
+5. Where can I get more information?
+------------------------------------
+The assembler and the hex-to-binary converter are described in detail
+in file ASEM_51.DOC.
+The 8051 bootstrap program BOOT-51 is explained in file BOOT51.DOC.
+File LICENSE.DOC contains the ASEM-51 license agreement.
+All what's new since version 1.2, is listed in file RELEASE.130.
+If you need updates or assistance, or you want to report bugs, see
+file SUPPORT.DOC.
+
+To read the HTML documentation, bookmark the index file DOCS.HTM.
+
+For late-breaking news check out the official ASEM-51 homepage at
+
+    http://plit.de/asem-51/
+
+
+6. How can I get rid of that bull-shit again?
+---------------------------------------------
+If you have installed ASEM-51, but you don't like it, you can easily
+uninstall it. Run the batch file KILLASEM.BAT provided,
+
+    KILLASEM C:\ASEM51
+
+(or whereever ASEM-51 is installed) and that's it.
